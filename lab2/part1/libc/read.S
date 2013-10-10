@@ -14,11 +14,15 @@
 read:
 	swi READ_SWI
 	mov r2, r0
+@read external errno 
 	bl  __errno_location                                                
-    mov r3, r0 
+	mov r3, r0 
 	mov r0, #0
+@update errno if error
 	cmp r2, #0
 	sublt r4, r0, r2
+@write back errno
 	strlt r4, [r3, #0]
+@return
 	movlt r0, #-1
 	bx	lr
