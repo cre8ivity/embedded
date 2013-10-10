@@ -1,0 +1,63 @@
+Danlei Zhou(danleiz)
+Zhuolin Liu(zhuolinl)
+Qian Mao(qianm)
+
+part2.txt
+
+Part 1: Assemnly Optimization
+Optimization attempted:
+1. reduce the number of used registers: eliminate the use of r4
+2. count down: replace add and cmp with subs, regard r3 itslef as a count-down counter
+3. merge two functional same blocks whild doing mod operation
+4. loop unrolling: use 46(two times) to unroll the loop
+
+strTable:
+	stmfd	sp!, {r5, r6}	@ reduce the number of stored registers
+	mov	r5, r0				@ get rid the use of r2 
+	subs r3, r3, #1			@ use r3 directly as a count-down counter, replace add + cmp 
+	blt	.L11
+.L9:
+	ldrb	r6, [r1, r3]	
+	mov ip, r6
+.L7:
+	sub	ip, ip, #23			@ merge two functional same blocks
+	cmp	ip, #45				@ loop unrolling: first sub 23, if remaing > 45, do sub 46
+	subgt ip, ip, #46		
+	cmp ip, #22				
+	bgt	.L7
+	cmp	ip, r2				
+	bgt	.L4
+	ldrb	r0, [r5, ip]	
+	cmp	r0, r6  
+	strneb	r6, [r5, ip]
+.L4:
+	subs r3, r3, #1  
+	bge	.L9
+.L11:
+	ldmfd	sp!, {r5, r6}	
+	mov pc, lr
+
+Reference running given example:
+Instruct	19
+Load-Store: 28
+Branch:		25
+Normal:		66
+Total:		320
+
+
+Part 2: C Code Optimization
+
+1. Optimize_1:
+	each element should have its right place. We can go through the array and flip the sign of the place where arr[i] 
+	should be. For example. When we meet abs(arr[i]) = 3, we set arr[2] = -arr[2], since for every number we will flip
+ 	its right place for twice and finally get a positive number except the specially one which only filp once. So we 
+ 	can check the array to find the position where has a negative number. The time is O(n) for two interation, and we
+ 	do not need extra space. Also, we can restore the original array if we want.
+ 	Time Complexity: O(2n), a.k.a, 2n
+ 	Space Complexity: O(1)
+
+2. Optimize_2: 
+	This algorithm relied on the nature of XOR. When we use XOR to sum up all numbers, the final result will be the
+	number appearing only once. 
+	Time Complexity: O(n), a.k.a, n
+	Space Complexity: O(1)

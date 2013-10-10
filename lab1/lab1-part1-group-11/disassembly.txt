@@ -1,0 +1,26 @@
+1. use "readelf -l hello", find the program entry point is 0x82ac, 
+which is 000082ac <_start>:
+
+2. use "readelf -s hello", find the first function is 
+"98: 00008254     0 FUNC    GLOBAL DEFAULT   10 _init". 
+Name is _init, which has the lowest address in all functions
+
+//32: 000082e4     0 FUNC    LOCAL  DEFAULT   12 call_gmon_start
+
+3. hello-d.txt just displays the assembler contents of executable sections 
+while hello-bigd.txt displays the assembler contents of all sections.
+
+4. Yes, it is correct. It shows:
+Disassembly of section .rodata:
+
+00008414 <_IO_stdin_used>:
+    8414:	00020001 	.word	0x00020001
+    8418:	6c6c6548 	.word	0x6c6c6548
+    841c:	6f77206f 	.word	0x6f77206f
+    8420:	21646c72 	.word	0x21646c72
+    8424:	00000000 	.word	0x00000000
+
+We can use gbd to read the .rodata
+(gdb) x/s 0x00008418
+0x8418:	 "Hello world!"
+This interpretation tells us it stores what we want to print.
