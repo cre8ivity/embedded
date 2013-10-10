@@ -5,6 +5,7 @@
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    21:45 & 10/9/2013
 #include <bits/swi.h>
+#include <bits/fileno.h>
 
 	.file	"hello.S"
 	.section	.rodata
@@ -15,11 +16,9 @@
 
 	.global	_start
 _start:
-@ fd = stdout
-	mov r0, #1
+	mov r0, #STDOUT_FILENO    @ fd = stdout
 	ldr r1, .L1
-@ the length of "Hello world\n"
-	mov r2, #13 
+	mov r2, #13    @ the length of "Hello world\n"
 	swi WRITE_SWI
 	mov	r0, #42
 	swi	EXIT_SWI
