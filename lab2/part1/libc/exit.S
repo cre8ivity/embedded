@@ -1,12 +1,15 @@
 @ exit.S: exit sycall wrapper
 @
-@ Authors: Group Member 1 <email address>
-@          Group Member 2 <email address>
-@ Date:    The current time & date
+@ Authors: ZHUOLIN LIU 1 <zhuolinl>
+@          QIAN MAO 2 <qianm>
+@          DANLEI ZHOU 3 <danleiz> 
+@ Date:    21:45 & 10/9/2013
+
+#include <bits/swi.h>
 
 	.file	"exit.S"
 	.text
 
 	.global	exit
 exit:
-	@ Needs more code.
+	swi	EXIT_SWI
