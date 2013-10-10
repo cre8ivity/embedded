@@ -1,12 +1,16 @@
 @ crt0.S: Execution startup routine
 @
-@ Authors: Group Member 1 <email address>
-@          Group Member 2 <email address>
-@ Date:    The current time & date
+@ Authors: ZHUOLIN LIU 1 <zhuolinl>
+@          QIAN MAO 2 <qianm>
+@          DANLEI ZHOU 3 <danleiz> 
+@ Date:    21:45 & 10/9/2013
 
 	.file	"crt0.S"
 	.text
 
 	.global	_start
 _start:
-	@ Needs more code.
+	ldr r0, [sp, #0]    @load the argc
+	add r1, sp, #4    @argv* is in the sp + 4
+	bl main
+	bl exit    @call main and exit

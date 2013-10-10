@@ -14,15 +14,11 @@
 write:
 	swi WRITE_SWI
 	mov r2, r0
-@read external errno 
-	bl  __errno_location                                                
+	bl  __errno_location   @read external errno                                               
 	mov r3, r0 
 	mov r0, #0
-@update errno if error
-	cmp r2, #0
+	cmp r2, #0    @update errno if error
 	sublt r4, r0, r2
-@write back errno
-	strlt r4, [r3, #0]
-@return
-	movlt r0, #-1
+	strlt r4, [r3, #0]    @write back errno
+	movlt r0, #-1    @return
 	bx	lr
