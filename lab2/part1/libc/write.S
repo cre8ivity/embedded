@@ -18,7 +18,7 @@ write:
 	mov r3, r0 
 	mov r0, #0
 	cmp r2, #0    @update errno if error
-	sublt r4, r0, r2
-	strlt r4, [r3, #0]    @write back errno
+	sublt r1, r0, r2
+	strlt r1, [r3, #0]    @write back errno
 	movlt r0, #-1    @return
 	bx	lr
