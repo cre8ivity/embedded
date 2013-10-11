@@ -1,5 +1,5 @@
 /*
- * rot13.c: ROT13 cipher test application
+ * write.c: write system call
  *
  * Authors: ZHUOLIN LIU 1 <zhuolinl>
  *          QIAN MAO 2 <qianm>
@@ -9,6 +9,7 @@
 #include <bits/types.h>
 #include <bits/errno.h>
 #include <bits/fileno.h>
+#include <bits/stack.h>
 #include <exports.h>
 
 ssize_t write(int fd, void *buf, size_t count) {
