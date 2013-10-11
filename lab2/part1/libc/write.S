@@ -22,5 +22,5 @@ write:
 	sublt r1, r0, r2
 	strlt r1, [r3, #0]    @write back errno
 	movlt r0, #-1    @return
-	stmfd sp!, {r0-r3}
+	ldmfd sp!, {r0-r3}
 	bx	lr
