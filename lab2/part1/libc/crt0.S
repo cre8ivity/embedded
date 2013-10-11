@@ -5,12 +5,12 @@
 @          DANLEI ZHOU 3 <danleiz> 
 @ Date:    21:45 & 10/9/2013
 
-	.file	"crt0.S"
-	.text
+    .file   "crt0.S"
+    .text
 
-	.global	_start
+    .global _start
 _start:
-	ldr		r0, [sp, #0]	@load the argc
-	add		r1, sp, #4		@argv* is in the sp + 4
-	bl		main
-	bl		exit			@call main and exit
+    ldr     r0, [sp, #0]    @load the argc
+    add     r1, sp, #4      @argv* is in the sp + 4
+    bl      main
+    bl      exit            @call main and exit

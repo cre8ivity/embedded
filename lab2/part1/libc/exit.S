@@ -7,9 +7,9 @@
 
 #include <bits/swi.h>
 
-	.file	"exit.S"
-	.text
+    .file   "exit.S"
+    .text
 
-	.global	exit
+    .global exit
 exit:
-	swi	EXIT_SWI
+    swi EXIT_SWI
