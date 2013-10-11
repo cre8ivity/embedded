@@ -10,7 +10,7 @@
 
 	.global	_start
 _start:
-	ldr r0, [sp, #0]    @load the argc
-	add r1, sp, #4    @argv* is in the sp + 4
-	bl main
-	bl exit    @call main and exit
+	ldr		r0, [sp, #0]	@load the argc
+	add		r1, sp, #4		@argv* is in the sp + 4
+	bl		main
+	bl		exit			@call main and exit

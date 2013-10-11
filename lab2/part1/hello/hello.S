@@ -16,11 +16,11 @@
 
 	.global	_start
 _start:
-	mov r0, #STDOUT_FILENO    @ fd = stdout
-	ldr r1, .L1
-	mov r2, #13    @ the length of "Hello world\n"
-	swi WRITE_SWI
-	mov	r0, #42
-	swi	EXIT_SWI
+	mov		r0, #STDOUT_FILENO	@ fd = stdout
+	ldr		r1, .L1
+	mov		r2, #13				@ the length of "Hello world\n"
+	swi		WRITE_SWI
+	mov		r0, #0
+	swi		EXIT_SWI
 .L1:
-	.word .LC0
+	.word	.LC0

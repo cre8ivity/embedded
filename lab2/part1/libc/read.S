@@ -12,15 +12,15 @@
 
 	.global	read
 read:
-	stmfd sp!, {r0-r3}
-	swi READ_SWI
-	mov r2, r0
-	bl  __errno_location   @read external errno                                               
-	mov r3, r0 
-	mov r0, #0
-	cmp r2, #0    @update errno if error
-	sublt r1, r0, r2
-	strlt r1, [r3, #0]    @write back errno
-	movlt r0, #-1    @return
-	ldmfd sp!, {r0-r3}
-	bx	lr
+	stmfd	sp!, {r0-r2}
+	swi		READ_SWI
+	cmp		r0, #0			@update errno if error
+	bge		end
+	ldr		r1, =errno		@read external errno                                               
+	mov		r2, #0
+	sub		r0, r2, r0
+	str 	r0, [r1]		@write back errno
+	mov 	r0, #-1			
+end:
+	ldmfd 	sp!, {r0-r2}	@return
+	mov		pc, lr
