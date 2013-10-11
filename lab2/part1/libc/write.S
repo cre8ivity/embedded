@@ -12,6 +12,7 @@
 
 	.global	write
 write:
+	stmfd sp!, {r0-r3}
 	swi WRITE_SWI
 	mov r2, r0
 	bl  __errno_location   @read external errno                                               
@@ -21,4 +22,5 @@ write:
 	sublt r1, r0, r2
 	strlt r1, [r3, #0]    @write back errno
 	movlt r0, #-1    @return
+	stmfd sp!, {r0-r3}
 	bx	lr
