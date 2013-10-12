@@ -10,14 +10,14 @@
 
     .global pushing_arg
 pushing_arg:
-    stmfd   sp!, {r8}               @store r8
-
-    mrs     r2, cpsr                @load cpsr
+    mrs     r2, cpsr                @load cpsr, cannot use r0,r1
     bic     r2, r2, #0xff
-    orr     r2, r2, #0xd0           @disable FIQ and IRQ
+    orr     r2, r2, #0xc0           @disable FIQ and IRQ
     msr     spsr, r2
-    movs    pc, pc                  @switch to user mode
+    stmfd   sp!, {r8, lr}           @store r8
+    mov     lr, pc                  @switch to user mode without change pc
+    movs    pc, lr
 
-    ldr     sp, =USER_MODE_STACK    @setup a full descending user mode stack
+    ldr     sp, =USER_MODE_STACK    @sp change to sp_user, load large const
     stmfd   sp!, {r0-r1}            @push u-boot argc & argv onto stack
-    ldr     pc, USER_PRG_ADD        @jump to user program   
+    ldr     pc, =USER_PRG_ADD       @jump to user program   

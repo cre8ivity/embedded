@@ -12,15 +12,16 @@
 #include <exports.h>
 #include <systemcall.h>
 
-
-//swi dispatcher, *arg is the address of sp in swi_handler.S
+/*
+ *swi dispatcher, *arg is the address of sp in swi_handler.S
+ */
 void c_swi_handler(int swi_num, void *args) {
     switch(swi_num) {
         case READ_SWI:
-            read((int)args[0], &args[1], args[2]);
+            read((int)args[0], &args[1], (size_t)args[2]);
             break;
         case WRITE_SWI:
-            write((int)args[0], &args[1], args[2]);
+            write((int)args[0], &args[1], (size_t)args[2]);
             break;
         case EXIT_SWI:
             exit((int)args[0]);

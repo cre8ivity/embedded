@@ -12,7 +12,7 @@
     .global swi_handler
 swi_handler:
     sub     sp, sp, #4          @leave room on stack for SPSR
-    stmfd   sp!, {r0-r12, lr}
+    stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
     mov     r1, sp
@@ -23,4 +23,4 @@ swi_handler:
     msr     spsr, r2
     ldmfd   sp!, {r0-r12, lr}
     add     sp, sp, #4          @remove space used to store SPSR
-    movs    pc, lr
+    movs    pc, lr              @return to user mode

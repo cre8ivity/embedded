@@ -8,6 +8,9 @@
     .test
 
     .global exit
+
+@the stack should be lr_svc, r8, spsr, pc_user, r12...r0
 exit:
-    ldr     lr, [sp, #13*4]     @lr_svc stores in [sp + 13*4]
+    add     sp, sp, #15*4    @restore the svc_stack
+    ldr     lr, [sp, #4]     @stack has only lr_svc and r8
     mov     pc, lr

@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
     size_t offset = instruction & 0xfff;
     size_t sign = instuction && 0x00800000;
     char error_msg[30] = "Unrecognized SWI vector\n";
-    size_t swi_handler_loc, cache_intruc_1, cache_intruc_2;
-    ssize_t user_return_value;
+    size_t swi_handler_loc, cache_inst_1, cache_inst_2;
+    ssize_t return_status;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
     if ((instuction - offset) | sign != INSTUCT_MASK) {
@@ -40,8 +40,8 @@ int main(int argc, char *argv[]) {
     }
 
     //store the code we try to revise
-    cache_intruc_1 = *(size_t *)swi_handler_loc;
-    cache_intruc_2 = *(size_t *)(swi_handler_loc + 4);
+    cache_inst_1 = *(size_t *)swi_handler_loc;
+    cache_inst_2 = *(size_t *)(swi_handler_loc + 4);
 
     //change the code
     //ldr pc, [pc, #-4]
@@ -49,14 +49,13 @@ int main(int argc, char *argv[]) {
     *(size_t *)(swi_handler_loc + 4) = (size_t)&swi_handler;
 
     //push u-boot's argc and argv on the user stack
-    user_return_value = pushing_arg(argc, argv);
-
+    return_status = pushing_arg(argc, argv);
     //restore r8
     restore_r8();
 
     //restore the code we try to revise
-    *(size_t *)swi_handler_loc = cache_intruc_1;
-    *(size_t *)(swi_handler_loc + 4) = cache_intruc_2;
+    *(size_t *)swi_handler_loc = cache_inst_1;
+    *(size_t *)(swi_handler_loc + 4) = cache_inst_2;
 
-	return user_return_value;
+	return return_status;
 }
