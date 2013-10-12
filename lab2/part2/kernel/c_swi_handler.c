@@ -8,10 +8,10 @@
  */
 #include <bits/types.h>
 #include <bits/fileno.h>
+#include <bits/stack.h>
 #include <exports.h>
 #include <systemcall.h>
 
-#define DEFAULT_EXIT 0x0badc0de
 
 //swi dispatcher, *arg is the address of sp in swi_handler.S
 void c_swi_handler(int swi_num, void *args) {

@@ -17,5 +17,6 @@
 #define SWI_VEC_LOC 0x08
 #define USER_MODE_STACK 0xa3000000
 #define USER_PRG_ADD 0xa2000000
+#define DEFAULT_EXIT 0x0badc0de
 
 #endif /* BITS_STACK_H */
