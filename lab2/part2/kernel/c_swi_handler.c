@@ -9,12 +9,9 @@
 #include <bits/types.h>
 #include <bits/fileno.h>
 #include <exports.h>
+#include <systemcall.h>
 
 #define DEFAULT_EXIT 0x0badc0de
-
-ssize_t read(int fd, void *buf, size_t count);
-ssize_t write(int fd, void *buf, size_t count);
-void exit(int status);
 
 //swi dispatcher, *arg is the address of sp in swi_handler.S
 void c_swi_handler(int swi_num, void *args) {
@@ -30,7 +27,7 @@ void c_swi_handler(int swi_num, void *args) {
             break;
         default:
             //invalid swi_number, print error message and exit
-            char buf[25] = "Invalid System Call\n"
+            char buf[25] = "Invalid System Call\n";
             write(STDOUT_FILENO, buf, 20);
             exit(DEFAULT_EXIT);
     }

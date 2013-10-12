@@ -14,5 +14,8 @@
 #define SDRAM_END   0xa3ffffff
 #define ROM_BASE    0x00000000
 #define ROM_END     0x00ffffff
+#define SWI_VEC_LOC 0x08
+#define USER_MODE_STACK 0xa3000000
+#define USER_PRG_ADD 0xa2000000
 
 #endif /* BITS_STACK_H */
