@@ -18,10 +18,12 @@
 void c_swi_handler(int swi_num, void *args) {
     switch(swi_num) {
         case READ_SWI:
-            read((int)args[0], &args[1], (size_t)args[2]);
+            //store the return value to args[0] in order to return it 
+            //to user space
+            ((int)args[0]) = read((int)args[0], &args[1], (size_t)args[2]);
             break;
         case WRITE_SWI:
-            write((int)args[0], &args[1], (size_t)args[2]);
+            ((int)args[0]) = write((int)args[0], &args[1], (size_t)args[2]);
             break;
         case EXIT_SWI:
             exit((int)args[0]);
