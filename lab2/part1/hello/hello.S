@@ -8,8 +8,6 @@
 #include <bits/fileno.h>
 
     .file	"hello.S"
-    .text
-
     .global	_start
 _start:
     mov	r0, #STDOUT_FILENO     @ fd = stdout
