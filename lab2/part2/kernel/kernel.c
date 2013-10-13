@@ -18,7 +18,7 @@
 
 int main(int argc, char *argv[]) {
 	//get the location of swi handler from vector table
-    size_t instruction = *(size_t *)&(SWI_VEC_LOC);
+    size_t instruction = *(size_t *)SWI_VEC_LOC;
     //get the offset and its sign
     size_t offset = instruction & 0xfff;
     size_t sign = instuction && 0x00800000;
