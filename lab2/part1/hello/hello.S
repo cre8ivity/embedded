@@ -2,25 +2,25 @@
 @
 @ Authors: ZHUOLIN LIU 1 <zhuolinl>
 @          QIAN MAO 2 <qianm>
-@          DANLEI ZHOU 3 <danleiz>   
-@ Date:    21:45 & 10/9/2013
+@          DANLEI ZHOU 3 <danleiz>
+@ Date:    18:32 & 10/13/2013
 #include <bits/swi.h>
 #include <bits/fileno.h>
 
-    .file   "hello.S"
-    .section    .rodata
-    .align  2
-.LC0:
-    .ascii  "Hello world!\n"
+    .file	"hello.S"
     .text
 
-    .global _start
+    .global	_start
 _start:
-    mov     r0, #STDOUT_FILENO  @ fd = stdout
-    ldr     r1, .L1
-    mov     r2, #13             @ the length of "Hello world\n"
-    swi     WRITE_SWI
-    mov     r0, #0
-    swi     EXIT_SWI
-.L1:
-    .word   .LC0
+    mov	r0, #STDOUT_FILENO     @ fd = stdout
+    ldr	r1, phello_str
+    mov	r2, #hello_size        @ length of "Hello world!\n"
+    swi	WRITE_SWI
+    mov	r0, #0
+    swi	EXIT_SWI
+phello_str:
+    .word       hello_str
+    .section    .rodata
+hello_str:
+    .ascii      "Hello world!\n"
+    .set        hello_size, .-hello_str
