@@ -21,6 +21,7 @@
 ssize_t read(int fd, void *buf, size_t count) {
     int i;
     char temp_char;
+    char *temp_buf = (char *)buf;
 
     //if fd is not STDIN, return -EBADF
     if (fd != STDIN_FILENO) {
@@ -29,7 +30,7 @@ ssize_t read(int fd, void *buf, size_t count) {
 
     //if memory range outside the SDRAM, return -EFAULT
     //use minus to prevent overflow
-    if (buf < SDRAM_BASE || buf > SDRAM_END
+    if ((size_t)buf < SDRAM_BASE || (size_t)buf > SDRAM_END
         || SDRAM_END - (size_t)buf < count) {
         return -EFAULT;
     }
@@ -46,7 +47,7 @@ ssize_t read(int fd, void *buf, size_t count) {
                 i--; // remove the current char
                 //remove the previous char when i is not 0
                 if (i != -1) {
-                    buf[i] = 0;
+                    temp_buf[i] = 0;
                     puts("\b \b");
                     i--;
                 }
@@ -54,12 +55,12 @@ ssize_t read(int fd, void *buf, size_t count) {
             case NEWLINE:
             case CARRY_RETURN:
             //return number of characters when \n\r
-                buf[i] = temp_char;
+                temp_buf[i] = temp_char;
                 putc(temp_char);
                 return i+1;
             default:
             //return 1 character
-                buf[i] = temp_char;
+                temp_buf[i] = temp_char;
                 putc(temp_char);
         }
     }

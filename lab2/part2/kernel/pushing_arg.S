@@ -6,7 +6,7 @@
 @ Date:    1:05 & 10/12/2013
 #include <bits/stack.h>
     .file "pushing_arg.S"
-    .test
+    .text
 
     .global pushing_arg
 pushing_arg:

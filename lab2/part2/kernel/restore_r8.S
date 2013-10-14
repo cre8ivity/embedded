@@ -5,7 +5,7 @@
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:55 & 10/12/2013
     .file "restore_r8.S"
-    .test
+    .text
 
     .global restore_r8
 

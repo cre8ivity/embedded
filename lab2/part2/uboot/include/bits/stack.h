@@ -7,7 +7,7 @@
  * Date:    14:45 & 10/11/2013
  */
 
-#ifdef BITS_STACK_H
+#ifndef BITS_STACK_H
 #define BITS_STACK_H
 
 #define SDRAM_BASE  0xa0000000

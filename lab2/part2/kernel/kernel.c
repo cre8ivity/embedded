@@ -12,6 +12,7 @@
 #include <bits/types.h>
 #include <bits/fileno.h>
 #include <systemcall.h>
+#include <exports.h>
 
 #define INSTUCT_MASK 0xe59ff000
 #define LOAD_PC 0xe51ff004
@@ -21,22 +22,23 @@ int main(int argc, char *argv[]) {
     size_t instruction = *(size_t *)SWI_VEC_LOC;
     //get the offset and its sign
     size_t offset = instruction & 0xfff;
-    size_t sign = instuction && 0x00800000;
-    char error_msg[30] = "Unrecognized SWI vector\n";
+    size_t sign = instruction && 0x00800000;
+    char *error_msg = (char *)malloc(30);
     size_t swi_handler_loc, cache_inst_1, cache_inst_2;
     ssize_t return_status;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
-    if ((instuction - offset) | sign != INSTUCT_MASK) {
-        write(STDOUT_FILENO, error_mag, 24);
+    if (((instruction - offset) | sign) != INSTUCT_MASK) {
+        error_msg = "Unrecognized SWI vector\n";
+        write(STDOUT_FILENO, error_msg, 24);
         exit(DEFAULT_EXIT);
     }
 
     //if offset is positive, add the location, else substract it.
     if (sign) {
-        swi_handler_loc = *(size_t *)&(SWI_VEC_LOC + offset + 0x08);
+        swi_handler_loc = *(size_t *)(SWI_VEC_LOC + offset + 0x08);
     } else {
-        swi_handler_loc = *(size_t *)&(SWI_VEC_LOC - offset + 0x08);
+        swi_handler_loc = *(size_t *)(SWI_VEC_LOC - offset + 0x08);
     }
 
     //store the code we try to revise

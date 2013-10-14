@@ -14,6 +14,7 @@
 
 ssize_t write(int fd, void *buf, size_t count) {
     int i;
+    char *temp_buf = (char *)buf;
 
     //if fd is not STDOUT, return -EBADF
     if (fd != STDOUT_FILENO) {
@@ -22,17 +23,17 @@ ssize_t write(int fd, void *buf, size_t count) {
 
     //buf should always be in the sdram range of rom range
     //use minus to prevent overflow
-    if ( (buf >= SDRAM_BASE && buf <= SDRAM_END &&
+    if ( ((size_t)buf >= SDRAM_BASE && (size_t)buf <= SDRAM_END &&
         SDRAM_END - (size_t)buf >= count) ||
-        (buf >= ROM_BASE && buf <= ROM_END && 
+        ((size_t)buf >= ROM_BASE && (size_t)buf <= ROM_END && 
         ROM_END - (size_t)buf >= count)) {
         //write 
         for (i = 0; i < count; i++) {
-            putc(buf[i]);
+            putc(temp_buf[i]);
         }
     } else {
         //if memory range outside the SDRAM or ROM, return -EFAULT
-        return -EFAULT
+        return -EFAULT;
     }
 
     //return number of bytes write

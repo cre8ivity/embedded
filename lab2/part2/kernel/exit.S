@@ -5,7 +5,7 @@
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:55 & 10/12/2013
     .file "exit.S"
-    .test
+    .text
 
     .global exit
 

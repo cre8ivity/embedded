@@ -7,7 +7,7 @@
 @ Date:    17:05 & 10/11/2013
 
     .file "swi_handler.S"
-    .test
+    .text
 
     .global swi_handler
 swi_handler:
