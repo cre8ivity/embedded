@@ -23,14 +23,12 @@ int main(int argc, char *argv[]) {
     //get the offset and its sign
     size_t offset = instruction & 0xfff;
     size_t sign = instruction && 0x00800000;
-    char *error_msg = (char *)malloc(30);
     size_t swi_handler_loc, cache_inst_1, cache_inst_2;
     ssize_t return_status;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
     if (((instruction - offset) | sign) != INSTUCT_MASK) {
-        error_msg = "Unrecognized SWI vector\n";
-        write(STDOUT_FILENO, error_msg, 24);
+        printf("Unrecognized SWI vector\n");
         exit(DEFAULT_EXIT);
     }
 

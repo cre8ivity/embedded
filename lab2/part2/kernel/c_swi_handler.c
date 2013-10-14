@@ -17,7 +17,7 @@
  *swi dispatcher, *arg is the address of sp in swi_handler.S
  */
 void c_swi_handler(int swi_num, size_t *args) {
-    char *buf = (char *)malloc(22);
+
     switch(swi_num) {
         case READ_SWI:
             //store the return value to args[0] in order to return it 
@@ -32,8 +32,7 @@ void c_swi_handler(int swi_num, size_t *args) {
             break;
         default:
             //invalid swi_number, print error message and exit
-            buf = "Invalid System Call\n";
-            write(STDOUT_FILENO, buf, 20);
+            printf("Invalid System Call\n");
             exit(DEFAULT_EXIT);
     }
 }
