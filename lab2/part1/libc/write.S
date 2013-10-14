@@ -12,7 +12,6 @@
 
     .global write
 write:
-    stmfd   sp!, {r1}
     swi     WRITE_SWI
     cmp     r0, #0          @update errno if error
     bge     end
@@ -21,5 +20,4 @@ write:
     str     r0, [r1]        @write back errno
     mov     r0, #-1         
 end:
-    ldmfd   sp!, {r1}    @return
-    mov     pc, lr
+    mov     pc, lr          @return
