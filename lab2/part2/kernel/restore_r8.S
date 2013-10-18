@@ -11,6 +11,5 @@
 
 @the stack should be lr_svc, r8
 restore_r8:
-    ldr     r8, [sp]        @TODO: check this value seriously
-    add     sp, sp, #8      @restore the svc stack by poping lr,r8
+    ldmfd   sp!, {r8, lr}
     mov     pc, lr

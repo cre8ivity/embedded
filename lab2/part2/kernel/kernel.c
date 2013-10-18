@@ -27,10 +27,13 @@ int main(int argc, char *argv[]) {
     ssize_t return_status;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
+    printf("instruction: %s, sign: %s\n", instruction, sign);
+    /*
     if (((instruction - offset) | sign) != INSTUCT_MASK) {
         printf("Unrecognized SWI vector\n");
         exit(DEFAULT_EXIT);
     }
+    */
 
     //if offset is positive, add the location, else substract it.
     if (sign) {

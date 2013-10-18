@@ -1,7 +1,7 @@
 CC      = gcc
 OBJCOPY = objcopy
 CFLAGS  = -O2 -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
-          -I ../uboot/include -I include
+          -I ../uboot/include -I include -I ../../part1/libc/include
 ASFLAGS = -nostdinc -I ../uboot/include -I include
 LDFLAGS = -nostdlib -Wl,-N,-Ttext,$(LOAD_ADDR)
 
