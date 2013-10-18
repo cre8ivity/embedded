@@ -9,7 +9,7 @@ LOAD_ADDR = 0xa3000000
 
 STUBS = ../uboot/stubs.o
 
-objects = kernel.o c_swi_handler.o exit.o swi_handler.o pushing_arg.o read.o write.o exit.o restore_r8.o
+objects = kernel.o c_swi_handler.o swi_handler.o pushing_arg.o read.o write.o exit.o restore_r8.o
 
 default: kernel.bin
 
