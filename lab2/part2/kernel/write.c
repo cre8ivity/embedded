@@ -28,6 +28,7 @@ ssize_t write(int fd, void *buf, size_t count) {
         ((size_t)buf >= ROM_BASE && (size_t)buf <= ROM_END && 
         ROM_END - (size_t)buf >= count)) {
         //write 
+        //TODO: unreadable code somwhere, such as u-boot code u-boot and global data struct
         for (i = 0; i < count; i++) {
             putc(temp_buf[i]);
         }
