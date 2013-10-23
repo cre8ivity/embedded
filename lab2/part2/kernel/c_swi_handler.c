@@ -12,7 +12,6 @@
 #include <bits/stack.h>
 #include <exports.h>
 #include <systemcall.h>
-#include <unistd.h>
 
 /*
  *swi dispatcher, *arg is the address of sp in swi_handler.S
