@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     printf("exit from user program\n");
 
     //restore r8
-    restore_r8();
+    //restore_r8();
 
     //restore the code we try to revise
     *(size_t *)swi_handler_loc = cache_inst_1;

@@ -4,6 +4,8 @@
 @          QIAN MAO 2 <qianm>
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:55 & 10/12/2013
+#include <bits/stack.h>
+
     .file "exit.S"
     .text
 
