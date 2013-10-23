@@ -11,6 +11,7 @@
 
 @the stack should be lr_svc, r8, spsr, pc_user, r12...r0
 exit:
-    add     sp, sp, #15*4    @restore the svc_stack
-    ldr     lr, [sp, #4]     @stack has only lr_svc and r8
-    mov     pc, lr
+    ldr     r2, =SAVED_SP_ADD
+    ldr     sp, [r2]             @restore saved sp
+    ldmfd   sp!, {r4-r12, lr}
+    mov     pc, lr               @return to kernel

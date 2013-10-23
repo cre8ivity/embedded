@@ -18,7 +18,7 @@
 #define LOAD_PC 0xe51ff004
 
 int main(int argc, char *argv[]) {
-	//get the location of swi handler from vector table
+    printf("get the location of swi handler from vector table\n");
     size_t instruction = *(size_t *)SWI_VEC_LOC;
     //get the offset and its sign
     size_t offset = instruction & 0xfff;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     ssize_t return_status;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
-    printf("instruction: %s, sign: %s\n", instruction, sign);
+    //printf("instruction: %s, sign: %s\n", instruction, sign);
     /*
     if (((instruction - offset) | sign) != INSTUCT_MASK) {
         printf("Unrecognized SWI vector\n");
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
         swi_handler_loc = *(size_t *)(SWI_VEC_LOC - offset + 0x08);
     }
 
-    //store the code we try to revise
+    printf("store the code we try to revise\n");
     cache_inst_1 = *(size_t *)swi_handler_loc;
     cache_inst_2 = *(size_t *)(swi_handler_loc + 4);
 
@@ -51,8 +51,15 @@ int main(int argc, char *argv[]) {
     *(size_t *)swi_handler_loc = LOAD_PC;
     *(size_t *)(swi_handler_loc + 4) = (size_t)&swi_handler;
 
+    //
+    printf("enter into user program\n");
+
     //push u-boot's argc and argv on the user stack
     return_status = pushing_arg(argc, argv);
+
+    //
+    printf("exit from user program\n");
+
     //restore r8
     restore_r8();
 
