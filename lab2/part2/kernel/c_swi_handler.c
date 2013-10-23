@@ -12,7 +12,9 @@
 #include <bits/stack.h>
 #include <exports.h>
 #include <systemcall.h>
-#include <unistd.h>
+
+extern ssize_t write(int fd, const void *buf, size_t count);
+extern ssize_t read(int fd, void *buf, size_t count);
 
 /*
  *swi dispatcher, *arg is the address of sp in swi_handler.S
