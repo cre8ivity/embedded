@@ -25,9 +25,9 @@ ssize_t write(int fd, void *buf, size_t count) {
     //buf should always be in the sdram and rom space
     //use minus to prevent overflow
     if ( ((size_t)buf >= SDRAM_BASE && (size_t)buf <= SDRAM_END &&
-        SDRAM_END - (size_t)buf >= count+1) ||
+        SDRAM_END - (size_t)buf + 1 >= count) ||
         ((size_t)buf >= ROM_BASE && (size_t)buf <= ROM_END && 
-        ROM_END - (size_t)buf >= count+1)) {
+        ROM_END - (size_t)buf + 1 >= count)) {
         //write 
         for (i = 0; i < count; i++) {
             putc(temp_buf[i]);

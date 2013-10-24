@@ -31,9 +31,9 @@ ssize_t read(int fd, void *buf, size_t count) {
     //if memory range outside the HEAP or FREE range, return -EFAULT
     //use minus to prevent overflow
     if (!(((size_t)buf >= HEAP_BASE && (size_t)buf <= HEAP_END &&
-        HEAP_END - (size_t)buf >= count+1) ||
+        HEAP_END - (size_t)buf + 1 >= count) ||
         ((size_t)buf >= FREE_BASE && (size_t)buf <= FREE_END &&
-        FREE_END - (size_t)buf >= count+1))) {
+        FREE_END - (size_t)buf + 1 >= count))) {
         return -EFAULT;
     }
 
