@@ -17,6 +17,7 @@
 #define INSTUCT_MASK 0xe59ff000
 #define LOAD_PC 0xe51ff004
 
+size_t saved_sp_add;
 
 int main(int argc, char *argv[]) {
     printf("get the location of swi handler from vector table\n");
@@ -49,8 +50,7 @@ int main(int argc, char *argv[]) {
     
     printf("cache_inst_1: %x\n", cache_inst_1);
     printf("cache_inst_2: %x\n", cache_inst_2);
-    //change the code
-    //ldr pc, [pc, #-4]
+    
     *(size_t *)swi_handler_loc = LOAD_PC;
     *(size_t *)(swi_handler_loc + 4) = (size_t)&swi_handler;
 
@@ -62,9 +62,6 @@ int main(int argc, char *argv[]) {
 
     //
     printf("exit from user program\n");
-
-    //restore r8
-    //restore_r8();
 
     //restore the code we try to revise
     *(size_t *)swi_handler_loc = cache_inst_1;

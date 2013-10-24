@@ -11,11 +11,11 @@
 
     .global swi_handler
 swi_handler:
-    ldr     r8, [sp, #4*4]      @restore r8
     sub     sp, sp, #4          @leave room on stack for SPSR
     stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
+    ldr     r8, [sp, #19*4]     @restore r8 for u-boot syscall
     mov     r1, sp
     ldr     r0, [lr, #-4]       @extract the SWI number
     bic     r0, r0, #0xff000000 @mask swi
