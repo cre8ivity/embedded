@@ -11,6 +11,7 @@
 
     .global swi_handler
 swi_handler:
+    ldr     r8, [sp, #4*4]      @restore r8
     sub     sp, sp, #4          @leave room on stack for SPSR
     stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
     mrs     r2, spsr

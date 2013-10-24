@@ -13,7 +13,7 @@
 
 @the stack should be lr_svc, r8, spsr, pc_user, r12...r0
 exit:
-    ldr     r2, =SAVED_SP_ADD
+    ldr     r2, =saved_sp_add
     ldr     sp, [r2]             @restore saved sp
-    ldmfd   sp!, {r1-r12, lr}
+    ldmfd   sp!, {r4-r12, lr}
     mov     pc, lr               @return to kernel

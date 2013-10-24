@@ -13,8 +13,8 @@
 #include <exports.h>
 
 #define EOT 4
-#define DELETE 127
-#define BACKSPACE 8
+//#define DELETE 127
+#define BACKSPACE 127
 #define NEWLINE 10
 #define CARRY_RETURN 13
 
@@ -42,7 +42,7 @@ ssize_t read(int fd, void *buf, size_t count) {
         switch(temp_char) {
             case EOT: //EOT return i
                 return i;
-            case DELETE:
+            //case DELETE:
             case BACKSPACE:
                 i--; // remove the current char
                 //remove the previous char when i is not 0

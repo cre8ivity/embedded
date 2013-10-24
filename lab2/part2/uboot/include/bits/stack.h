@@ -18,6 +18,5 @@
 #define USER_MODE_STACK 0xa3000000
 #define USER_PRG_ADD 0xa2000000
 #define DEFAULT_EXIT 0x0badc0de
-#define SAVED_SP_ADD 0xa3000000
 
 #endif /* BITS_STACK_H */
