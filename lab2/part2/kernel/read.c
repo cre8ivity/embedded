@@ -56,7 +56,7 @@ ssize_t read(int fd, void *buf, size_t count) {
             case CARRY_RETURN:
             //return number of characters when \n\r
                 temp_buf[i] = temp_char;
-                putc(temp_char);
+                putc('\n');
                 return i+1;
             default:
             //return 1 character

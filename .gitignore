@@ -3,5 +3,7 @@
 *.swp
 *.DS_Store
 *.bin
-Makefile
 *.o
+*.a
+
+Makefile

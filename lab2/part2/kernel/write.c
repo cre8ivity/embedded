@@ -15,6 +15,7 @@
 ssize_t write(int fd, void *buf, size_t count) {
     int i;
     char *temp_buf = (char *)buf;
+    char newline = '\n';
 
     //if fd is not STDOUT, return -EBADF
     if (fd != STDOUT_FILENO) {
@@ -30,6 +31,8 @@ ssize_t write(int fd, void *buf, size_t count) {
         //write 
         for (i = 0; i < count; i++) {
             putc(temp_buf[i]);
+            if(temp_buf[i] == '\r')
+		putc(newline);
         }
     } else {
         //if memory range outside the SDRAM or ROM, return -EFAULT

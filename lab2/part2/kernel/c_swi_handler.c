@@ -20,19 +20,19 @@ extern ssize_t read(int fd, void *buf, size_t count);
  *swi dispatcher, *arg is the address of sp in swi_handler.S
  */
 void c_swi_handler(int swi_num, size_t *args) {
-    printf("%d\n",swi_num);
+    //printf("%d\n",swi_num);
     switch(swi_num) {
         case READ_SWI:
             //store the return value to args[0] in order to return it 
             //to user space
-            printf("in READ\n");
+            //printf("in READ\n");
             args[0] = read((int)args[0], (void *)args[1], (size_t)args[2]);
-            printf("end READ\n");
+            //printf("end READ\n");
             break;
         case WRITE_SWI:
-            printf("in WRITE\n");
+            //printf("in WRITE\n");
             args[0] = write((int)args[0], (void *)args[1], (size_t)args[2]);
-            printf("end WRITE\n");
+            //printf("end WRITE\n");
             break;
         case EXIT_SWI:
             printf("in EXIT\n");
