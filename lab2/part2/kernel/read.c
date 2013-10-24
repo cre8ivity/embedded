@@ -30,8 +30,8 @@ ssize_t read(int fd, void *buf, size_t count) {
 
     //if memory range outside the SDRAM, return -EFAULT
     //use minus to prevent overflow
-    if ((size_t)buf < SDRAM_BASE || (size_t)buf > SDRAM_END
-        || SDRAM_END - (size_t)buf < count) {
+    if ((size_t)buf >= SDRAM_BASE && (size_t)buf <= SDRAM_END
+        && SDRAM_END - (size_t)buf >= count) {
         return -EFAULT;
     }
 
