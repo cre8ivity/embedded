@@ -30,7 +30,7 @@ loop:
     str     r2, [sp], #-4           @pushing argv[i] into [sp + 4*i + 4]
     b       loop
 end:
-    str     r0, [sp], #-4           @pushing argc
+    str     r0, [sp]                @pushing argc
     mov     lr, pc                  @function as BL
     ldr     pc, =USER_PRG_ADD       @jump to user program
     swi     EXIT_SWI                @exit to kernel

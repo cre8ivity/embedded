@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <unistd.h>
 
+
 #define BUF_SIZE 1024
 
 int main(int argc, char* argv[]) {
@@ -22,6 +23,7 @@ int main(int argc, char* argv[]) {
     char space = ' ';
     char newline = '\n';
     int j;
+
     // write each argument to stdout and seperate them with space
     for(j = 1;j < argc;j++){
         int length = 0;
