@@ -5,6 +5,7 @@
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:05 & 10/12/2013
 #include <bits/stack.h>
+#include <bits/swi.h>
     .file "exec.S"
     .text
 
@@ -32,11 +33,4 @@ end:
     str     r0, [sp], #-4           @pushing argc
     mov     lr, pc                  @function as BL
     ldr     pc, =USER_PRG_ADD       @jump to user program
-    mrs     r2, cpsr                @prepare to exit to kernel
-    bic     r2, r2, #0x1f
-    orr     r2, r2, #0x13           @switch to svc mode
-    msr     cpsr, r2
-    ldr     r2, =saved_sp_add
-    ldr     sp, [r2] 
-    ldmfd   sp!, {r4-r12, lr}
-    mov     pc, lr
+    swi     EXIT_SWI                @exit to kernel
