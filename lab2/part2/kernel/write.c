@@ -22,10 +22,12 @@ ssize_t write(int fd, void *buf, size_t count) {
         return -EBADF;
     }
 
-    //buf should always be in the sdram range of rom range
+    //buf should always be in the sdram range, heap and free space
     //use minus to prevent overflow
-    if ( ((size_t)buf >= SDRAM_BASE && (size_t)buf <= SDRAM_END &&
-        SDRAM_END - (size_t)buf >= count) ||
+    if ( ((size_t)buf >= HEAP_BASE && (size_t)buf <= HEAP_END &&
+        HEAP_END - (size_t)buf >= count) ||
+        ((size_t)buf >= FREE_BASE && (size_t)buf <= FREE_END &&
+        FREE_END - (size_t)buf >= count) ||
         ((size_t)buf >= ROM_BASE && (size_t)buf <= ROM_END && 
         ROM_END - (size_t)buf >= count)) {
         //write 

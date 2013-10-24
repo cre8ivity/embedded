@@ -18,5 +18,9 @@
 #define USER_MODE_STACK 0xa3000000
 #define USER_PRG_ADD 0xa2000000
 #define DEFAULT_EXIT 0x0badc0de
+#define HEAP_BASE   0xa3edf000
+#define HEAP_END    0xa3efffff
+#define FREE_BASE   0xa0000000
+#define FREE_END    0xa2ffffff 
 
 #endif /* BITS_STACK_H */
