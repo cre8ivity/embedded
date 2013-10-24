@@ -12,7 +12,6 @@
 
 void exit(int status);
 void swi_handler();
-ssize_t pushing_arg(int argc, char *argv[]);
-void restore_r8();
+ssize_t exec(int argc, char *argv[]);
 
 #endif /* SYSTERMCALL_H */

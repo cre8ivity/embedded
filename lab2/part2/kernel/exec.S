@@ -5,11 +5,11 @@
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:05 & 10/12/2013
 #include <bits/stack.h>
-    .file "pushing_arg.S"
+    .file "exec.S"
     .text
 
-    .global pushing_arg
-pushing_arg:
+    .global exec
+exec:
     stmfd   sp!, {r4-r12, lr}       @APCS convention
     ldr     r2, =saved_sp_add
     str     sp, [r2]                @store svc_sp

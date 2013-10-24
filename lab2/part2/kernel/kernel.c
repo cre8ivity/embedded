@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     printf("enter into user program\n");
 
     //push u-boot's argc and argv on the user stack
-    return_status = pushing_arg(argc, argv);
+    return_status = exec(argc, argv);
 
     //
     printf("exit from user program\n");
