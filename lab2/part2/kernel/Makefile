@@ -28,7 +28,7 @@ kernel: start.o $(objects)
 	$(CC) -c $(ASFLAGS) -o $@ $<
 
 clean:
-	rm -f kernel start.o $(objects)
+	rm -f kernel.bin kernel start.o $(objects)
 
 clobber: clean
 	rm -f kernel.bin

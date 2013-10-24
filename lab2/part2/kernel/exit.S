@@ -15,5 +15,5 @@
 exit:
     ldr     r2, =SAVED_SP_ADD
     ldr     sp, [r2]             @restore saved sp
-    ldmfd   sp!, {r4-r12, lr}
+    ldmfd   sp!, {r1-r12, lr}
     mov     pc, lr               @return to kernel

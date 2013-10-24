@@ -10,7 +10,7 @@
 
     .global pushing_arg
 pushing_arg:
-    stmfd   sp!, {r4-r12, lr}       @APCS convention
+    stmfd   sp!, {r1-r12, lr}       @APCS convention
     ldr     r2, =SAVED_SP_ADD
     str     sp, [r2]                @store svc_sp
     mrs     r2, cpsr                @load cpsr, cannot use r0,r1
@@ -32,10 +32,10 @@ end:
     mov     lr, pc                  @function as BL
     ldr     pc, =USER_PRG_ADD       @jump to user program
     mrs     r2, cpsr
-    bic     r2, r2, #0xff
+    bic     r2, r2, #0x1f
     orr     r2, r2, #0x13           @switch to svc mode
     msr     cpsr, r2
     ldr     r2, =SAVED_SP_ADD
     ldr     sp, [r2] 
-    ldmfd   sp!, {r4-r12, lr}
+    ldmfd   sp!, {r1-r12, lr}
     mov     pc, lr

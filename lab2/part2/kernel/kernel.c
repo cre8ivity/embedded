@@ -65,7 +65,8 @@ int main(int argc, char *argv[]) {
 
     //restore the code we try to revise
     *(size_t *)swi_handler_loc = cache_inst_1;
+    printf("restored first\n");
     *(size_t *)(swi_handler_loc + 4) = cache_inst_2;
-
-	return return_status;
+    printf("resorted second\nstatus:%d\n", return_status);
+    return return_status;
 }
