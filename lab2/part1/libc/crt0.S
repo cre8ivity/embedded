@@ -14,4 +14,4 @@ _start:
     add     r1, sp, #4      @argv* is in the sp + 4
     bl      main
     bl      exit            @call main and exit
-    
+
