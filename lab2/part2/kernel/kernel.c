@@ -20,7 +20,6 @@
 size_t saved_sp_add;
 
 int main(int argc, char *argv[]) {
-    printf("get the location of swi handler from vector table\n");
     size_t instruction = *(size_t *)SWI_VEC_LOC;
     //get the offset and its sign
     size_t offset = instruction & 0xfff;
@@ -41,29 +40,18 @@ int main(int argc, char *argv[]) {
         swi_handler_loc = *(size_t *)(SWI_VEC_LOC - offset + 0x08);
     }
 
-    printf("store the code we try to revise\n");
     cache_inst_1 = *(size_t *)swi_handler_loc;
     cache_inst_2 = *(size_t *)(swi_handler_loc + 4);
     
-    printf("cache_inst_1: %x\n", cache_inst_1);
-    printf("cache_inst_2: %x\n", cache_inst_2);
     
     *(size_t *)swi_handler_loc = LOAD_PC;
     *(size_t *)(swi_handler_loc + 4) = (size_t)&swi_handler;
 
-    //
-    printf("enter into user program\n");
-
     //push u-boot's argc and argv on the user stack
     return_status = exec(argc, argv);
 
-    //
-    printf("exit from user program\n");
-
     //restore the code we try to revise
     *(size_t *)swi_handler_loc = cache_inst_1;
-    printf("restored first\n");
     *(size_t *)(swi_handler_loc + 4) = cache_inst_2;
-    printf("resorted second\nstatus:%d\n", return_status);
     return return_status;
 }

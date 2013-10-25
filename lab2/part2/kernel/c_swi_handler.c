@@ -35,7 +35,6 @@ void c_swi_handler(int swi_num, size_t *args) {
             //printf("end WRITE\n");
             break;
         case EXIT_SWI:
-            printf("in EXIT\n");
             exit((int)args[0]);
             break;
         default:
