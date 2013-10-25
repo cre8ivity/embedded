@@ -21,6 +21,6 @@
 #define HEAP_BASE   0xa3edf000
 #define HEAP_END    0xa3efffff
 #define FREE_BASE   0xa0000000
-#define FREE_END    0xa2ffffff 
+#define FREE_END    0xa1ffffff 
 
 #endif /* BITS_STACK_H */
