@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
         // read bytes
         read_bytes = read(STDIN_FILENO, buf, BUF_SIZE);
         // exit if no input
-        if (read_bytes == 1) {
+        if (read_bytes == 0) {
             exit(0);
         }
 
