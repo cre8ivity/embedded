@@ -1,0 +1,30 @@
+/*
+ * c_swi_handler.c: swi dispatcher
+ *
+ * Authors: ZHUOLIN LIU 1 <zhuolinl>
+ *          QIAN MAO 2 <qianm>
+ *          DANLEI ZHOU 3 <danleiz> 
+ * Date:    12:14 & 11/2/2013
+ */
+#include <types.h> 
+#include <arm/reg.h>
+#include <arm/timer.h>
+#include <arm/interrupt.h>
+
+extern volatile uint64_t systime;
+
+// read the 
+void c_irq_handler() {
+    // figure out if the irq is filed by OMSR0 match
+    uint32_t is_timerInterrupt = reg_read(INT_ICPR_ADDR) & (1 << INT_OSTMR_0);
+    uint32_t updated_match;
+
+    if (is_timerInterrupt) {
+        //10ms heart bit, try to update the match regsiter
+        update_match = reg_read(OSTMR_OSMR_ADDR(0)) + T10MS;
+        reg_write(OSTMR_OSMR_ADDR(0), update_match);
+        //clear OSSR match and update system time
+        ref_set(OSTMR_OSSR_ADDR, 0x1); 
+        systime++;
+    }
+}

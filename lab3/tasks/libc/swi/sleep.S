@@ -2,8 +2,10 @@
  *
  * @brief sleep sycall wrapper
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-10-31
+ * @author KHUOLIN LIU 1 <zhuolinl>
+ * @          QIAN MAO 2 <qianm>
+ * @          DANLEI ZHOU 3 <danleiz>   
+ * @ Date:    1:41 & 11/2/2013
  */
 
 #include <asm.h>
@@ -12,3 +14,5 @@
 
 FUNC(sleep)
 	@ Add code here.  Put your names at the top.
+    swi     SLEEP_SWI
+    mov     pc, lr          @ return
