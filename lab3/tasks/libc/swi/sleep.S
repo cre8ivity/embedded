@@ -2,7 +2,7 @@
  *
  * @brief sleep sycall wrapper
  *
- * @author KHUOLIN LIU 1 <zhuolinl>
+ * @author    ZHUOLIN LIU 1 <zhuolinl>
  * @          QIAN MAO 2 <qianm>
  * @          DANLEI ZHOU 3 <danleiz>   
  * @ Date:    1:41 & 11/2/2013
