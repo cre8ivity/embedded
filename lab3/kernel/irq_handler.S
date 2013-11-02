@@ -15,9 +15,6 @@ irq_handler:
     stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
-    mov     r1, sp
-    ldr     r0, [lr, #-4]       @extract the SWI number
-    bic     r0, r0, #0xff000000 @mask swi
     bl      c_irq_handler
     ldr     r2, [sp, #14*4]     @resotre spsr
     msr     spsr, r2
