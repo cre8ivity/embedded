@@ -9,11 +9,12 @@
 #include <types.h>
 #include <arm/timer.h>
 #include <lib.h>
+#include <exports.h>
 
 extern volatile uint64_t systime;
 
 unsigned long time() {
-
+    printf("SystemTime: %u\n", (unsigned int)systime);
     return systime * TRUE_TIME_RATIO;
 }
 
