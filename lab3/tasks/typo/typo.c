@@ -5,7 +5,7 @@
  * Links to libc.
  */
 #include <stdio.h>
-#include <time.h>
+
 int main(int argc, char** argv)
 {
 	
@@ -17,9 +17,9 @@ int main(int argc, char** argv)
 		int starttime;
 		int currtime;
 
-		starttime = time(NULL);
+		starttime = time();
 		scanf("%s",str);
-		currtime = time(NULL);
+		currtime = time();
 		int diff = currtime- starttime;
 	    puts(str);
 	    printf("%d\n",diff);
