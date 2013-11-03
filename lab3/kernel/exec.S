@@ -17,6 +17,14 @@ exec:
     str     sp, [r2]                @store svc_sp
     mrs     r2, cpsr                @load cpsr, cannot use r0,r1
     bic     r2, r2, #0xff
+    orr     r2, r2, #0xd2           @switch to IRQ mode and disable IRQ, FIQ
+    msr     cpsr, r2
+    ldr     sp, =IRQ_MODE_STACK     @initialize irq_sp
+    ldr     r2, =irq_sp
+    str     sp, [r2]                @store irq_sp base
+
+    mrs     r2, cpsr                @load cpsr, cannot use r0,r1
+    bic     r2, r2, #0xff
     orr     r2, r2, #0x50           @disable FIQ, and change mode
     msr     cpsr, r2                @switch to user mode
     

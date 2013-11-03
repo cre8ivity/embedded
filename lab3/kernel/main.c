@@ -14,8 +14,9 @@
 #include <arm/exception.h>
 #include <arm/interrupt.h>
 #include <arm/timer.h>
- #include <arm/reg.h>
+#include <arm/reg.h>
 #include <systemcall.h>
+#include <exports.h>
 
 #define INSTUCT_MASK 0xe59ff000
 #define LOAD_PC 0xe51ff004
@@ -24,7 +25,7 @@
 #define OFF_MASK 0xfff
 
 uint32_t global_data;
-size_t irq_sp = IRQ_STACK_BASE; // TODO: move to a global space file 
+size_t irq_sp; // TODO: move to a global space file 
 size_t saved_sp_add;
 size_t systime = 0;
 
@@ -48,16 +49,23 @@ int kmain(int argc, char** argv, uint32_t table)
     irq_handler_loc = handler_install(vec_loc, (size_t)&irq_handler, &irq_cache_inst_1, &irq_cache_inst_2);
 
     //initialize timer
-    reg_clear(INT_ICLR_ADDR, 1 << (INT_OSTMR_0-1));
-    reg_set(INT_ICMR_ADDR, 1 << (INT_OSTMR_0-1));
+    reg_clear(INT_ICLR_ADDR, 1 << INT_OSTMR_0);
+    reg_set(INT_ICMR_ADDR, 1 << INT_OSTMR_0);
     //enable OSMR in OIER
     reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0);
     //clear OSCR
     reg_write(OSTMR_OSCR_ADDR, 0);
     //OSMR0 to be 10ms
     reg_write(OSTMR_OSMR_ADDR(0), T10MS);
-
     
+/*
+    printf("end setting timer\n");
+    printf("INT_ICLR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(INT_ICLR_ADDR));
+    printf("INT_ICMR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(INT_ICMR_ADDR));
+    printf("OSTMR_OIER_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OIER_ADDR));
+    printf("OSTMR_OSCR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OSCR_ADDR));
+    printf("OSTMR_OSMR_ADDR(0)_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OSMR_ADDR(0)));
+*/
     //push u-boot's argc and argv on the user stack
     return_status = exec(argc, argv);
 
