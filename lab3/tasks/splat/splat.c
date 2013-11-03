@@ -7,20 +7,18 @@
 #include<stdio.h>
 int main(int argc, char** argv)
 {
-	/* Add code here -- put your names at the top. */
-	
-	char c[] = "|/-\\";
-	int i = 0;
-	while(1){
+    /* Add code here -- put your names at the top. */
 
-		printf("%c",c[i]);		
-		
-		sleep(200);
-		printf("\b");
-		
-		i = i==3 ?0:i+1; 
-			
-	}
+    char c[] = "|/-\\";
+    int i = 0;
+    while(1){
 
-        return 0;
+        printf("%c",c[i]);
+        sleep(200);
+        printf("\b");
+        
+        i = (i==3 ?0:i+1); 	
+    }
+
+    return 0;
 }
