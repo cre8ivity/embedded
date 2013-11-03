@@ -12,7 +12,11 @@ int main(int argc, char** argv)
 {
     
     while(1){
+<<<<<<< HEAD
         char pompt = '<';
+=======
+        char pompt = '<';   
+>>>>>>> e3f88b8b861d54d8a4775d801c9b054e0d8acf1e
         write(1,(void* )&pompt,1);
         char str[BUF_SIZE];
         int starttime;
