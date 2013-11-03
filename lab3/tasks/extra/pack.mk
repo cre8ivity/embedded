@@ -1,0 +1,5 @@
+PROGS_EXTRA_OBJS := extra.o
+PROGS_EXTRA_OBJS := $(PROGS_EXTRA_OBJS:%=$(TDIR)/extra/%)
+ALL_OBJS += $(PROGS_EXTRA_OBJS)
+
+$(TDIR)/bin/exit : $(PROGS_EXTRA_OBJS)
