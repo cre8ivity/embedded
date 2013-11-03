@@ -19,8 +19,9 @@
 
 //change kernel loc
 #define USER_MODE_STACK 0xa3000000
-#define USER_PRG_ADD 0xa2000000
+#define USER_PRG_ADD 0xa0000000
 #define DEFAULT_EXIT 0x0badc0de
+#define IRQ_STACK_BASE 0xa3ededf3
 #define HEAP_BASE   0xa3edf000
 #define HEAP_END    0xa3efffff
 #define FREE_BASE   0xa0000000

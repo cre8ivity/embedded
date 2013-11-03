@@ -21,10 +21,10 @@ void c_irq_handler() {
 
     if (is_timerInterrupt) {
         //10ms heart bit, try to update the match regsiter
-        update_match = reg_read(OSTMR_OSMR_ADDR(0)) + T10MS;
-        reg_write(OSTMR_OSMR_ADDR(0), update_match);
+        updated_match = reg_read(OSTMR_OSMR_ADDR(0)) + T10MS;
+        reg_write(OSTMR_OSMR_ADDR(0), updated_match);
         //clear OSSR match and update system time
-        ref_set(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0); 
+        reg_set(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0); 
         systime++;
     }
 }

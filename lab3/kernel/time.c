@@ -8,6 +8,7 @@
  */
 #include <types.h>
 #include <arm/timer.h>
+#include <lib.h>
 
 extern volatile uint64_t systime;
 

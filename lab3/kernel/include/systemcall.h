@@ -12,6 +12,7 @@
 
 void exit(int status);
 void swi_handler();
+void irq_handler();
 ssize_t exec(int argc, char *argv[]);
 
 #endif /* SYSTERMCALL_H */

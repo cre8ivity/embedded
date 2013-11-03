@@ -4,7 +4,7 @@
 @          QIAN MAO 2 <qianm>
 @          DANLEI ZHOU 3 <danleiz>   
 @ Date:    1:04 & 11/2/2013
-
+#include <bits/swi.h>
     .file "irq_handler.S"
     .text
 

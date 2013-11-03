@@ -24,26 +24,28 @@
 #define OFF_MASK 0xfff
 
 uint32_t global_data;
+size_t irq_sp = IRQ_STACK_BASE; // TODO: move to a global space file 
 size_t saved_sp_add;
+size_t systime = 0;
 
-size_t handler_install(size_t vec_loc, size_t handler_func, size_t[] cache);
-void handler_restore(size_t handler_loc, size_t[] cache);
+size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1, size_t *cache_inst_2);
+void handler_restore(size_t handler_loc, size_t *cache_inst_1, size_t *cache_inst_2);
 
 int kmain(int argc, char** argv, uint32_t table)
 {
-	app_startup(); /* bss is valid after this point */
-	global_data = table;
+    app_startup(); /* bss is valid after this point */
+    global_data = table;
 
-	/* Add your code here */
+    /* Add your code here */
     size_t swi_handler_loc, irq_handler_loc;
     ssize_t return_status; 
-    size_t[2] irq_cache, swi_cache;
+    size_t irq_cache_inst_1, irq_cache_inst_2, swi_cache_inst_1, swi_cache_inst_2;
     size_t vec_loc = SWI_VEC_LOC;
     
     //install two handlers
-    swi_handler_loc = handler_install(vec_loc, &swi_handler, swi_cache);
+    swi_handler_loc = handler_install(vec_loc, (size_t)&swi_handler, &swi_cache_inst_1, &swi_cache_inst_2);
     vec_loc = IRQ_VEC_LOC;
-    irq_handler_loc = handler_install(vec_loc, &irq_handler, irq_cache);
+    irq_handler_loc = handler_install(vec_loc, (size_t)&irq_handler, &irq_cache_inst_1, &irq_cache_inst_2);
 
     //initialize timer
     reg_clear(INT_ICLR_ADDR, 1 << (INT_OSTMR_0-1));
@@ -60,19 +62,23 @@ int kmain(int argc, char** argv, uint32_t table)
     return_status = exec(argc, argv);
 
     //restore the code we try to revise
-    handler_restore(swi_handler_loc, swi_cache);
-    handler_restore(irq_handler_loc, irq_cache);
+    handler_restore(swi_handler_loc, &swi_cache_inst_1, &swi_cache_inst_2);
+    handler_restore(irq_handler_loc, &irq_cache_inst_1, &irq_cache_inst_2);
 
     return return_status;
 }
 
 
-size_t handler_install(size_t vec_loc, size_t handler_func, size_t[] cache) {
+size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1, size_t *cache_inst_2) {
     //get the offset and its sign
-    size_t instruction = *(size_t *)vec_loc;
-    size_t offset = instruction & OFF_MASK;
-    size_t sign = instruction && SIGN_MASK;
-    size_t handler_loc, cache_inst_1, cache_inst_2;
+    size_t instruction;
+    size_t offset;
+    size_t sign;
+    size_t handler_loc;
+
+    instruction = *(size_t *)vec_loc;
+    offset = instruction & OFF_MASK;
+    sign = instruction && SIGN_MASK;
 
     //if instruction is not 'ldr pc, [pc, #imm12]' return error
     if (((instruction - offset) | SIGN_MASK) != INSTUCT_MASK) {
@@ -87,8 +93,8 @@ size_t handler_install(size_t vec_loc, size_t handler_func, size_t[] cache) {
         handler_loc = *(size_t *)(vec_loc - offset + PC_AHEAD);
     }
 
-    cache[0] = *(size_t *)handler_loc;
-    cache[1] = *(size_t *)(handler_loc + 4);
+    *cache_inst_1 = *(size_t *)handler_loc;
+    *cache_inst_2 = *(size_t *)(handler_loc + 4);
        
     *(size_t *)handler_loc = LOAD_PC;
     *(size_t *)(handler_loc + 4) = (size_t)handler_func;
@@ -96,7 +102,7 @@ size_t handler_install(size_t vec_loc, size_t handler_func, size_t[] cache) {
     return handler_loc;
 }
 
-void handler_restore(size_t handler_loc, size_t[] cache) {
-    *(size_t *)handler_loc = cache[0];
-    *(size_t *)(handler_loc + 4) = cache[1];
+void handler_restore(size_t handler_loc, size_t *cache_inst_1, size_t *cache_inst_2) {
+    *(size_t *)handler_loc = *cache_inst_1;
+    *(size_t *)(handler_loc + 4) = *cache_inst_2;
 }
