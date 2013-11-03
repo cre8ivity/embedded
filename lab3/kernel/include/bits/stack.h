@@ -15,6 +15,9 @@
 #define ROM_BASE    0x00000000
 #define ROM_END     0x00ffffff
 #define SWI_VEC_LOC 0x08
+#define IRQ_VEC_LOC 0x18
+
+//change kernel loc
 #define USER_MODE_STACK 0xa3000000
 #define USER_PRG_ADD 0xa2000000
 #define DEFAULT_EXIT 0x0badc0de

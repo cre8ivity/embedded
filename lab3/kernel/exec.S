@@ -17,7 +17,7 @@ exec:
     str     sp, [r2]                @store svc_sp
     mrs     r2, cpsr                @load cpsr, cannot use r0,r1
     bic     r2, r2, #0xff
-    orr     r2, r2, #0xd0           @disable FIQ and IRQ, and change mode
+    orr     r2, r2, #0x50           @disable FIQ, and change mode
     msr     cpsr, r2                @switch to user mode
     
     ldr     sp, =USER_MODE_STACK    @sp change to sp_user, load large const
@@ -34,4 +34,4 @@ end:
     str     r0, [sp]                @pushing argc
     mov     lr, pc                  @function as BL
     ldr     pc, =USER_PRG_ADD       @jump to user program
-    swi     EXIT_SWI                @exit to kernel
+

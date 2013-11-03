@@ -1,17 +1,13 @@
 //conflict files
 main.c :
-    //judge if irq offset
-    //store 
     //set irq stack
-    //initialzie irq timer and match
-    //restore insturction
 
-exec.c :  do not disable IRQ 
+swi_Handler.S : should enable IRQ?
 
 time.c : see if we need to add the current OSCR time when get time
 
 
 global variable : systime : c_irq_handler
 irq_sp: irq_handler
-r8_add: irq_handler
+//r8_add: irq_handler
 

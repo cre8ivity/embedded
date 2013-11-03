@@ -15,8 +15,13 @@ irq_handler:
     stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
+
+    mrs     r2, cpsr            
+    orr     r2, r2, #0x80       @disable further IRQ
+    msr     cpsr, r2
+
     bl      c_irq_handler
-    ldr     r2, [sp, #14*4]     @resotre spsr
+    ldr     r2, [sp, #14*4]     @restore spsr
     msr     spsr, r2
     ldmfd   sp!, {r0-r12, lr}
     add     sp, sp, #4          @remove space used to store SPSR
