@@ -14,7 +14,6 @@
 
 extern volatile uint64_t systime;
 
-// read the 
 void c_irq_handler() {
     // figure out if the irq is filed by OMSR0 match
     uint32_t is_timerInterrupt = reg_read(INT_ICPR_ADDR) & (1 << (INT_OSTMR_0));
