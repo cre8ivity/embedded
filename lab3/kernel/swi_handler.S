@@ -13,6 +13,11 @@
 swi_handler:
     sub     sp, sp, #4          @leave room on stack for SPSR
     stmfd   sp!, {r0-r12, lr}   @this lr is the user program pc
+    
+    mrs     r2, cpsr            @enable irq
+    bic     r2, #0x80
+    msr     cpsr, r2
+
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
     ldr     r8, [sp, #19*4]     @restore r8 for u-boot syscall

@@ -2,8 +2,6 @@
 main.c :
     //set irq stack
 
-swi_Handler.S : should enable IRQ?
-
 time.c : see if we need to add the current OSCR time when get time
 
 
