@@ -1,11 +1,10 @@
-//conflict files
-main.c :
-    //set irq stack
+//extra.c
+add sleep(20) in random or totaly slove the problem
 
-time.c : see if we need to add the current OSCR time when get time
+//typo.c 
+consider read more than size of buffer
 
 
-global variable : systime : c_irq_handler
-irq_sp: irq_handler
-//r8_add: irq_handler
+//push code in qian's machine
 
+doc
