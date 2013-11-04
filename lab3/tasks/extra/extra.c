@@ -31,33 +31,38 @@ int get_pos(char c);
 #define GAME1 1
 #define GAME2 2
 #define GAME3 3
+#define EXIT 4
 
 int main(int argc, char** argv)
 {
-    
-    printf("please select a program:\n");
-    printf("1: rock scissor paper\n");
-    printf("2: recursive sleep\n");
-    printf("3: Whack-A-Mole\n");
-    char choice;
-    char ignore;
-    read(0, &choice, 1);
-    read(0, &ignore, 1);
-    choice = choice - '0';
-    //printf("%d",choice);
-    switch(choice){
-        case GAME1:
-            game1();
-            break;
-        case GAME2:
-            game2();
-            break;
-        case GAME3:
-            game3();
-            break;
-        default:
-            printf("please stick to the instruction:\n");
-            break;
+    while(1){
+        printf("please select a program:\n");
+        printf("1: rock scissor paper\n");
+        printf("2: recursive sleep\n");
+        printf("3: Whack-A-Mole\n");
+        char choice;
+        char ignore;
+        read(0, &choice, 1);
+        read(0, &ignore, 1);
+        choice = choice - '0';
+        //printf("%d",choice);
+        switch(choice){
+            case GAME1:
+                game1();
+                break;
+            case GAME2:
+                game2();
+                break;
+            case GAME3:
+                game3();
+                break;
+            case EXIT:
+                return 0;
+            default:
+                printf("please stick to the instruction:\n");
+                break;
+        }
+
     }
     return 0;
 } 
@@ -149,20 +154,16 @@ void get_name(int n, char* str){
     switch(n){
         case ROCK:
             memcpy(str, "Rock", 10);
-            break;
-            
+            break;       
         case PAPER:
             memcpy(str, "Paper", 10);
-            break;
-            
+            break;     
         case SCISSOR:
             memcpy(str, "Scissor", 10);
-            break;
-            
+            break;   
         case LIZARD:
             memcpy(str, "Lizard", 10);
-            break;
-            
+            break; 
         case SPOCK:
             memcpy(str, "Spock", 10);
             break;
