@@ -226,18 +226,17 @@ void game3(){
     generate_random_array(keys,4);
     print_game3(keys);
     char input;
-    time_t start = time(NULL);
+    int start = time();
     while(read(0,&input,1)>0){
         int pos = get_pos(input);
         if(pos < 0)
             continue;
         keys[pos] = 0;
-        time_t end = time(NULL);
-        if((end - start )>2){
+        int end = time();
+        if((end - start )>2000){
             generate_random_array(keys,1);
-            start = time(NULL);
+            start = time();
         }
-        int i = 0;
         
         print_game3(keys);
     }   
