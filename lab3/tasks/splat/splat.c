@@ -1,25 +1,26 @@
 /** @file splat.c
  *
  * @brief Displays a spinning cursor.
- *
+ * Authors: DANLEI ZHOU 1 <danleiz> 
+ *          ZHUOLIN LIU 2 <zhuolinl>
+ *          QIAN MAO 3 <qianm>
  * Links to libc.
  */
 #include <stdio.h>
 #include <unistd.h>
 
+#define SLEEPTIME 200
+
 int main(int argc, char** argv)
 {
-    /* Add code here -- put your names at the top. */
-
     char c[] = "|/-\\";
     int i = 0;
     while(1){
-
         printf("%c",c[i]);
-        sleep(200);
+        sleep(SLEEPTIME);
         printf("\b");
         
-        i = (i==3 ?0:i+1); 	
+        i = i == 3 ? 0 : i+1; 	
     }
 
     return 0;
