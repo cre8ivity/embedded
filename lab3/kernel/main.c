@@ -59,14 +59,6 @@ int kmain(int argc, char** argv, uint32_t table)
     //OSMR0 to be 10ms
     reg_write(OSTMR_OSMR_ADDR(0), T10MS);
     
-/*
-    printf("end setting timer\n");
-    printf("INT_ICLR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(INT_ICLR_ADDR));
-    printf("INT_ICMR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(INT_ICMR_ADDR));
-    printf("OSTMR_OIER_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OIER_ADDR));
-    printf("OSTMR_OSCR_ADDR_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OSCR_ADDR));
-    printf("OSTMR_OSMR_ADDR(0)_CONTENT: %x\n", *(unsigned int *)reg_read(OSTMR_OSMR_ADDR(0)));
-*/
     //push u-boot's argc and argv on the user stack
     return_status = exec(argc, argv);
 

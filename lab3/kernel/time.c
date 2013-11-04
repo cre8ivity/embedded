@@ -14,7 +14,6 @@
 extern volatile uint64_t systime;
 
 unsigned long time() {
-    printf("SystemTime: %u\n", (unsigned int)systime);
     return systime * TRUE_TIME_RATIO;
 }
 
