@@ -22,9 +22,9 @@ int main(int argc, char** argv)
         // TODO: need to handle case when user input long strings
         int read_size = read(0, str, BUF_SIZE);
         currtime = time();
-        int diff = currtime- starttime;
+        float diff = (currtime- starttime)/1000;
         write(1,(void* )&str,read_size);
-        printf("%d\n",diff);
+        printf("%.1f\n",diff);
     }
     return 0;
 }
