@@ -19,7 +19,7 @@ int judge(int ai, int user);
 
 void game3();
 void print_game3(int* keys);
-void generate_random_array(int* keys, int n);
+void generate_random_array(int* keys, int n,int forbidden);
 int get_pos(char c);
 
 #define ROCK 0
@@ -223,31 +223,30 @@ void game3(){
 
     int keys[9] = {0,0,0,0,0,0,0,0,0};
 
-    generate_random_array(keys,4);
+    generate_random_array(keys,4,9);
     print_game3(keys);
     char input;
     int start = time();
     while(read(0,&input,1)>0){
         int pos = get_pos(input);
         if(pos < 0)
-            continue;
+            break;
         keys[pos] = 0;
         int end = time();
-        if((end - start )>2000){
-            generate_random_array(keys,1);
+        if((end - start ) > 200){
+            generate_random_array(keys,1,pos);
             start = time();
         }
-        
         print_game3(keys);
     }   
 }
 
-void generate_random_array(int* keys, int n){
+void generate_random_array(int* keys, int n, int forbidden){
     
     int count = 0;
     while(count < n){
         int i = random(8);
-        if(keys[i] == 1)
+        if(keys[i] == 1 || i == forbidden)
             continue;
         else{
             keys[i] =1;
