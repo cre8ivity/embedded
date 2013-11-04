@@ -1,4 +1,4 @@
-/** @file game.c
+/** @file extra.c
  *
  * @brief Echos characters back with timing data.
  *
@@ -10,11 +10,12 @@
 #include <string.h>
 
 int random(int n);
-char* get_name(int n);
+void get_name(int n, char* str);
 void game1();
 void game2();
 void ani_print(char* str, int ms);
 void game2_rec(int sleep_time, int rec_level, int curr_level);
+int judge(int ai, int user);
 
 
 #define ROCK 0
@@ -49,33 +50,38 @@ int main(int argc, char** argv)
 			printf("please stick to the instruction:\n");
 			break;
 	}
-		
+    return 0;
 } 
 
 
 
 int random(int n){
 	//srand((unsigned int)time(NULL));
-	int time = time();
-	int mode = time % n;
+	int current_time = time() / 10;
+	int mode = current_time % n;
 	//int mod = rand() %n;
-	return mod;
+	return mode;
 }
 
 void game1(){
 	while(1){
 		int ai = random(5);
-		char* str;
-		str = get_name(ai);
+	    char str[10];
+		get_name(ai, str);
 		printf("Please choose one weapon:\n");
 		printf("0: Rock 1: Paper 2: Scissor 3: Lizard 4: Spock\n");
 		char user_choice;
 		char ignore;
-		int read_byte = read(0, &user_choice, 1);
+		read(0, &user_choice, 1);
 		read(0, &ignore, 1);	
-		user_choice = user_choice - '0';
+		
+        if (user_choice > '4' || user_choice < '0') {
+            break;
+        }
+        user_choice = user_choice - '0';
 		//printf("%d\n",user_choice);
-		char* user_str = get_name(user_choice);
+        char user_str[10];
+		get_name(user_choice, user_str);
 		int result = judge(ai,user_choice);
 
 		if(result == 1 ){
@@ -132,28 +138,32 @@ int judge(int ai, int user){
 
 }
 
-char* get_name(int n){
-	
+void get_name(int n, char* str){
 	switch(n){
 		case ROCK:
-			return "Rock";
+			memcpy(str, "Rock", 10);
+            break;
 			
 		case PAPER:
-			return "Paper";
+			memcpy(str, "Paper", 10);
+            break;
 			
 		case SCISSOR:
-			return "Scissor";
+			memcpy(str, "Scissor", 10);
+            break;
 			
 		case LIZARD:
-			return  "Lizard";
+			memcpy(str, "Lizard", 10);
+            break;
 			
 		case SPOCK:
-			return"Spock";		
+			memcpy(str, "Spock", 10);
+            break;
 	}
 }
 void game2(){
-
-	ani_print("Welcome\n",1);
+    char str[] = "Welcome\n";
+	ani_print(str, 200);
 	char sleep_time, rec_level;
 	printf("Please input sleep time and recursive level: e.g: 5 2\n");
 	
@@ -164,11 +174,11 @@ void game2(){
 	read(0, &ignore, 1);
 	sleep_time = sleep_time - '0';
 	rec_level = rec_level - '0';
-	
-
+    int sleep;
+	sleep = sleep_time *1000;
 	int i = 1;
 
-	game2_rec(sleep_time,rec_level,i);
+	game2_rec(sleep,rec_level,i);
 	printf("You are AWAKE!!\n");
 
 

@@ -27,6 +27,7 @@
 uint32_t global_data;
 size_t irq_sp; // TODO: move to a global space file 
 size_t saved_sp_add;
+size_t saved_kernel_cpsr;
 size_t systime = 0;
 
 size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1, size_t *cache_inst_2);

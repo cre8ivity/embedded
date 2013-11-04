@@ -19,7 +19,8 @@
 
 //change kernel loc
 #define USER_MODE_STACK 0xa3000000
-#define IRQ_MODE_STACK 0xa3ededf3
+// midpoint betweeen svc_stack_base and kernel code
+#define IRQ_MODE_STACK 0xa376f6f9   
 #define USER_PRG_ADD 0xa0000000
 #define DEFAULT_EXIT 0x0badc0de
 #define HEAP_BASE   0xa3edf000

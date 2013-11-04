@@ -13,6 +13,10 @@
     .global exec
 exec:
     stmfd   sp!, {r4-r12, lr}       @APCS convention
+    mrs     r2, cpsr                @store cpsr
+    ldr     r3, =saved_kernel_cpsr
+    str     r2, [r3]
+
     ldr     r2, =saved_sp_add
     str     sp, [r2]                @store svc_sp
     mrs     r2, cpsr                @load cpsr, cannot use r0,r1

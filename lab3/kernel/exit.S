@@ -15,5 +15,8 @@
 exit:
     ldr     r2, =saved_sp_add
     ldr     sp, [r2]             @restore saved sp
+    ldr     r3, =saved_kernel_cpsr
+    ldr     r2, [r3]
+    msr     cpsr, r2             @restore saved cpsr when jump into user program
     ldmfd   sp!, {r4-r12, lr}
     mov     pc, lr               @return to kernel
