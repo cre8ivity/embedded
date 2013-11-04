@@ -1,10 +1,13 @@
 //extra.c
-add sleep(20) in random or totaly slove the problem
+comment and style and redundent code
 
 //typo.c 
 consider read more than size of buffer
 
 
-//push code in qian's machine
+//push code in qian's machine, dont cover my change!!!
+dont forget to remove irq_sp.
 
-doc
+documents
+
+//final check and redundent code!
