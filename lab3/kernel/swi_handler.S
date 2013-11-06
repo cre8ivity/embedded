@@ -20,8 +20,7 @@ swi_handler:
 
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
-    ldr     r2, =global_data
-    ldr     r8, [r2]
+    ldr     r8, [sp, #19*4]     @restore r8 for u-boot syscall
     mov     r1, sp
     ldr     r0, [lr, #-4]       @extract the SWI number
     bic     r0, r0, #0xff000000 @mask swi

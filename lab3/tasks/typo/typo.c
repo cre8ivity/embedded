@@ -11,7 +11,6 @@
 #define BUF_SIZE 1024
 int main(int argc, char** argv)
 {
-    
     while(1){
         char pompt = '<';
         write(STDOUT_FILENO, (void*) &pompt, 1);
@@ -22,6 +21,11 @@ int main(int argc, char** argv)
         starttime = time();
         
         int read_size = read(STDIN_FILENO, str, BUF_SIZE);
+
+        if (read_size < 0) {
+        // return error
+            return 1;
+        }
         currtime = time();
        
         char* write_buf_ptr;
@@ -40,8 +44,9 @@ int main(int argc, char** argv)
 
         int diff_int = (currtime- starttime) / 1000;
         int diff_float = (currtime - starttime) / 100 - 10 * diff_int;
-        printf("%d.%d\n", diff_int, diff_float);
+        printf("%d.%ds\n", diff_int, diff_float);
         
     }
+
     return 0;
 }
