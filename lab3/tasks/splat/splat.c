@@ -13,11 +13,16 @@
 
 int main(int argc, char** argv)
 {
+    // initiall the char to splat
     char c[] = "|/-\\";
     int i = 0;
+
     while(1){
+        //print the char and sleep for a while
         printf("%c",c[i]);
         sleep(SLEEPTIME);
+
+        //backspace to print a new char
         printf("\b");
         
         i = i == 3 ? 0 : i+1; 	

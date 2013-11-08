@@ -30,9 +30,9 @@ ssize_t write(int fd, void *buf, size_t count) {
         SDRAM_END - (size_t)buf + 1 >= count) ||
         // ((size_t)buf >= ROM_BASE && (size_t)buf <= ROM_END && 
         ((size_t)buf <= ROM_END && 
-        // ***above line is a change of the original by removing buf >= ROM_BASE 
-        // ***because this will cause a warning        
+        // ROM_BASE is 0, so no need to compare it with usigned int        
         ROM_END - (size_t)buf + 1 >= count)) {
+
         //write 
         return_count = 0;
         for (i = 0; i < count; i++) {

@@ -45,6 +45,7 @@ int get_pos(char c);
 int main(int argc, char** argv)
 {
     while(1){
+        // print usage
         printf("please select a program:\n");
         printf("1: rock scissor paper\n");
         printf("2: recursive sleep\n");
@@ -52,6 +53,8 @@ int main(int argc, char** argv)
         printf("4: Exit\n");
         char choice;
         char ignore;
+
+        // wait user to input game index
         read(STDIN_FILENO, &choice, 1);
         read(STDIN_FILENO, &ignore, 1);
         choice = choice - '0';
@@ -79,6 +82,7 @@ int main(int argc, char** argv)
 
 /*
  * function to get a random integer between 0-n
+ * based on time
  */
 int random(int n){
 
@@ -86,38 +90,50 @@ int random(int n){
     int mode = current_time % n;
     return mode;
 }
+
 /*
  * game1 main function 
  */
 void game1(){
     while(1){
+        // ai weapon and get it
         int ai = random(5);
         char str[10];
         get_name(ai, str);
+
+        // print usage
         printf("Please choose one weapon:\n");
         printf("0: Rock 1: Paper 2: Scissor 3: Lizard 4: Spock\n");
+
         char user_choice;
         char ignore;
+
+        // wait user to get his weapon
         read(STDIN_FILENO, &user_choice, 1);
         read(STDIN_FILENO, &ignore, 1);    
         
+        // error input
         if (user_choice > '4' || user_choice < '0') {
             break;
         }
         user_choice = user_choice - '0';
         char user_str[10];
-        get_name(user_choice, user_str);
-        int result = judge(ai,user_choice);
 
+        // get user weapon
+        get_name(user_choice, user_str);
+
+        // get result and print
+        int result = judge(ai,user_choice);
         if(result == 1 ){
             printf("You win! AI: %s, you: %s\n",str,user_str);
         } else if(result == -1){
-            printf("You loss!AI: %s, you: %s\n",str,user_str);
+            printf("You loss! AI: %s, you: %s\n",str,user_str);
         } else {
-            printf("Tie!AI: %s, you: %s\n",str,user_str);
+            printf("Tie! AI: %s, you: %s\n",str,user_str);
         }
     }
 }
+
 /*
  * decide the result of game1
  */
@@ -130,6 +146,7 @@ int judge(int ai, int user){
             else if(user == ROCK)
                 result = 0;
             break;
+
         case PAPER:
             if(user == SCISSOR || user == LIZARD)
                 result = 1;
@@ -143,6 +160,7 @@ int judge(int ai, int user){
             else if(user == SCISSOR)
                 result = 0;
             break;
+
         case LIZARD:
             if(user == SCISSOR || user == ROCK)
                 result = 1;
@@ -160,6 +178,7 @@ int judge(int ai, int user){
     return result;
 
 }
+
 /*
  * get the name of each weapon number, used for display result
  */
@@ -182,12 +201,16 @@ void get_name(int n, char* str){
             break;
     }
 }
+
 /*
  * game 2 main function
  */
 void game2(){
+    // print welcome message using sleep
     char str[] = "Welcome to inception\n";
     ani_print(str, 200);
+
+    // wait and get user input
     char sleep_time, rec_level;
     printf("Please input sleep time and recursive level: e.g: 5 2\n");    
     char ignore;
@@ -197,18 +220,21 @@ void game2(){
     read(STDIN_FILENO, &ignore, 1);
     sleep_time = sleep_time - '0';
     rec_level = rec_level - '0';
+
     int sleep;
     sleep = sleep_time * 1000;
     int i = 1;
+
+    // go the the inception
     game2_rec(sleep,rec_level, i);
     printf("You are AWAKE!!\n");
 }
+
 /*
  * game2 recursive helper, return when curr_level hit the bottom level.
  */
 void game2_rec(int sleep_time, int rec_level, int curr_level){
-    
-    
+    // print sleep level 
     printf("You are in level %d.\n", curr_level);
     int level = curr_level;
     sleep(sleep_time);
@@ -216,10 +242,11 @@ void game2_rec(int sleep_time, int rec_level, int curr_level){
     if(curr_level > rec_level){
         return;
     }
+    // recursive sleep
     game2_rec(sleep_time, rec_level, curr_level);
     printf("You are back in level %d.\n", level);
-    
 }
+
 /*
  * helper function, which can dymanically display a string in a given speed.
  */
@@ -233,6 +260,7 @@ void ani_print(char* str, int ms){
     }
     return;
 }
+
 /*
  * Whack a Mole(3*3) main function,
  * in the beginning, there are four moles. and a new mole will generate each 0.5s.
@@ -241,12 +269,15 @@ void ani_print(char* str, int ms){
 void game3(){
 
     int keys[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+    // generate the initial moles layout
     generate_random_array(keys, 4, 9);
+    // print inital matrix
     print_game3(keys);
     char input;
     int count = 4;
     int start = time();
+
+    // read and handle user input
     while(read(STDIN_FILENO, &input, 1)>0){
         int pos = get_pos(input);
         if(pos < 0)
@@ -254,25 +285,32 @@ void game3(){
         if(keys[pos] == 1){
             count--;
             keys[pos] = 0;
-        }            
+        }
+
         int end = time();
-        if((end - start ) > 500 && count <8 ){
+        //generate a user moles if time over 0.5 s
+        if((end - start ) > 500 && count < 8 ){
             generate_random_array(keys, 1, pos);
             count++;
             start = time();
         }
+        // print new matrix
         print_game3(keys);
     }   
 }
+
 /*
  * helper function to randomly generate n more moles, 
  * the forbidden position cannot be occupied.
+ * fill up the place of the random output
  */
 void generate_random_array(int* keys, int n, int forbidden){
     
     int count = 0;
     while(count < n){
         int i = random(8);
+        // if user just bit a mole, the mole will not 
+        // re-appear in that hole
         if(keys[i] == 1 || i == forbidden)
             continue;
         else{
@@ -281,6 +319,7 @@ void generate_random_array(int* keys, int n, int forbidden){
         }
     }
 }
+
 /*
  * helper function to match user input to certain spot. 
  * will return -1 when wrong key is hit.
@@ -309,6 +348,7 @@ int get_pos(char c){
             return -1;
     }
 }
+
 /*
  * helper function to print the game
  */
@@ -331,7 +371,9 @@ void print_game3(int* keys){
     line3[4] = keys[7]? hit: space;
     line3[7] = keys[8]? hit: space;
 
+    //clear the screen
     const char* CLEAR_SCREE_ANSI = "\e[1;1H\e[2J";
     write(1,CLEAR_SCREE_ANSI, 12);
+    //print the new matrix
     printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n", line0, line1, line0, line2, line0, line3, line0);
 }

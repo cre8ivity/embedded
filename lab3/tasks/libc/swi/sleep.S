@@ -14,6 +14,6 @@
 	.file "sleep.S"
 
 FUNC(sleep)
-	@ Add code here.  Put your names at the top.
+	@ sleep wrapper, no need to handle return value
     swi     SLEEP_SWI
     mov     pc, lr          @ return

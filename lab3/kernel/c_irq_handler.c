@@ -10,6 +10,14 @@
 #include <arm/reg.h>
 #include <arm/timer.h>
 #include <arm/interrupt.h>
+/*
+ * c_irq_handler: irq handle function
+ *
+ * Authors: ZHUOLIN LIU 1 <zhuolinl>
+ *          QIAN MAO 2 <qianm>
+ *          DANLEI ZHOU 3 <danleiz> 
+ * Date:    17:45 & 10/11/2013
+ */
 #include <exports.h>
 
 extern volatile uint64_t systime;
@@ -20,10 +28,10 @@ void c_irq_handler() {
     uint32_t updated_match;
     
     if (is_timerInterrupt) {
-        //10ms heart bit, try to update the match regsiter
+        // 10ms heart bit, try to update the match regsiter
         updated_match = reg_read(OSTMR_OSCR_ADDR) + T10MS;
         reg_write(OSTMR_OSMR_ADDR(0), updated_match);
-        //clear OSSR match and update system time
+        // clear OSSR match and update system time
         reg_set(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0); 
         systime++;
     }

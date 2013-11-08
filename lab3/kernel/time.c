@@ -14,6 +14,7 @@
 extern volatile uint64_t systime;
 
 unsigned long time() {
+    // return the current time by product the ratio
     return systime * TRUE_TIME_RATIO;
 }
 

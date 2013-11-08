@@ -15,6 +15,7 @@ extern volatile uint64_t systime;
 void sleep(unsigned long millis) {
 
     uint64_t curr_time = systime;
+    // while until the current time is over the setted time
     while (curr_time + millis / TRUE_TIME_RATIO >= systime);
 }
 

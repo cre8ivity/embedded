@@ -38,7 +38,6 @@ int kmain(int argc, char** argv, uint32_t table)
     app_startup(); /* bss is valid after this point */
     global_data = table;
 
-    /* Add your code here */
     size_t swi_handler_loc, irq_handler_loc;
     ssize_t return_status; 
     size_t irq_cache_inst_1, irq_cache_inst_2, swi_cache_inst_1, swi_cache_inst_2;
@@ -69,7 +68,9 @@ int kmain(int argc, char** argv, uint32_t table)
     return return_status;
 }
 
-
+/*
+ * install a handler in some place 
+ */
 size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1, size_t *cache_inst_2) {
     //get the offset and its sign
     size_t instruction;
@@ -103,6 +104,9 @@ size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1
     return handler_loc;
 }
 
+/*
+ * restore the original instructions which are modified
+ */
 void handler_restore(size_t handler_loc, size_t *cache_inst_1, size_t *cache_inst_2) {
     *(size_t *)handler_loc = *cache_inst_1;
     *(size_t *)(handler_loc + 4) = *cache_inst_2;
