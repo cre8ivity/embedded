@@ -25,5 +25,11 @@ void irq_handler() {
         // clear OSSR match and update system time
         reg_set(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0); 
         systime++;
+
+        // update device whether nect event for every device has occured 
+        dev_update(get_millis());
+
+        // context switch
+        dispatch_save();
     }
 }

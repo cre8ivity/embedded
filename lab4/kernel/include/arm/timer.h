@@ -36,6 +36,10 @@
 
 #define OSTMR_FREQ            3686400      /* Oscillator frequency in hz */
 
+// new define
+#define T10MS (OSTMR_FREQ / 100)           /* timer for 10ms unit */
+#define TRUE_TIME_RATIO 10
+
 #ifndef ASSEMBLER
 
 void init_timer(void);
