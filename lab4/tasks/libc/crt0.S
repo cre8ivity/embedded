@@ -12,3 +12,6 @@
 
 FUNC(_start)
 	@ needs code.  Put your names at the top.
+    ldr     r0, [sp]        @load the argc
+    add     r1, sp, #4      @argv* is in the sp + 4
+    bl      main

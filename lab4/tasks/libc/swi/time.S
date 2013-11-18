@@ -11,4 +11,6 @@
 	.file "time.S"
 
 FUNC(time)
-	@ Add code here.  Put your name at the top.
+    @ time wrapper, no need to handle return value
+    swi     TIME_SWI
+    mov     pc, lr          @ return
