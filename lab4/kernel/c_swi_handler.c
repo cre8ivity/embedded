@@ -32,6 +32,9 @@ void c_swi_handler(int swi_num, size_t *args) {
         case TIME_SWI:
             args[0] = time_syscall();
             break;
+        case EVENT_WAIT:
+            args[0] = event_wait((unsigned int)args[0]);
+            break;
         default:
             //invalid swi_number, print error message and exit
             printf("Invalid System Call\n");

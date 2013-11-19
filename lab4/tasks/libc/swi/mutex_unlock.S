@@ -11,4 +11,12 @@
 	.file "mutex_unlock.S"
 
 FUNC(mutex_unlock)
-	@ Add code here.  Put your name at the top.
+    swi     MUTEX_UNLOCK
+    cmp     r0, #0          @update errno if error
+    bge     end
+    ldr     r1, =errno      @read external errno
+    rsb     r0, r0, #0
+    str     r0, [r1]        @write back errno
+    mov     r0, #-1         
+end:
+    mov     pc, lr          @return

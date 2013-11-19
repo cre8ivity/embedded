@@ -77,7 +77,7 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
     //push u-boot's argc and argv on the user stack
     return_status = exec(argc, argv);
 
-    //restore the code we try to revise
+    //restore the code we try to revise : no need in the project, but leave it
     handler_restore(swi_handler_loc, &swi_cache_inst_1, &swi_cache_inst_2);
     handler_restore(irq_handler_loc, &irq_cache_inst_1, &irq_cache_inst_2);
 

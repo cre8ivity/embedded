@@ -26,10 +26,7 @@ void irq_handler() {
         reg_set(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0); 
         systime++;
 
-        // update device whether nect event for every device has occured 
-        dev_update(get_millis());
-
-        // context switch
-        dispatch_save();
+        // update device whether next event for every device has occured 
+        dev_update(systime * TRUE_TIME_RATIO);
     }
 }

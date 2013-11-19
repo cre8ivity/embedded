@@ -45,8 +45,11 @@ static dev_t devices[NUM_DEVICES];
  */
 void dev_init(void)
 {
-   /* the following line is to get rid of the warning and should not be needed */	
-   devices[0]=devices[0];
+    int i;
+    for (i = 0; i < NUM_DEVICES; i++) {
+        devices[i].next_match = dev_freq[i];
+        devices[i].sleep_queue = 0;
+    }
 }
 
 
@@ -56,9 +59,17 @@ void dev_init(void)
  *
  * @param dev  Device number.
  */
-void dev_wait(unsigned int dev __attribute__((unused)))
-{
-	
+void dev_wait(unsigned int dev)
+{   
+    // get the current task's tcb, no need to handle fault dev
+	tcb_t* current_task_tcb = get_cur_tcb();
+
+    // insert the task on the head of device sleep queue
+    current_task_tcb->sleep_queue = devices[dev].sleep_queue;
+    devices[dev].sleep_queue = current_task_tcb;
+
+    // make it sleep
+    dispatch_sleep();
 }
 
 
@@ -69,8 +80,24 @@ void dev_wait(unsigned int dev __attribute__((unused)))
  * interrupt corresponded to the interrupt frequency of a device, this 
  * function should ensure that the task is made ready to run 
  */
-void dev_update(unsigned long millis __attribute__((unused)))
+void dev_update(unsigned long millis)
 {
-	
+    int i;
+	for (i = 0; i < NUM_DEVICES; i++) {
+        // if a devices task match the time the add all sleep takes to the run queue
+        if (devices[i].next_match == millis) {
+            while (devices[i].sleep_queue) {
+                tcb_t* head = devices[i].sleep_queue;
+                runqueue_add(head, head->cur_prio);
+                // go to the next sleep task
+                devices[i].sleep_queue = head.sleep_queue;
+                // set the current task's next to null
+                head.sleep_queue = null;
+            }
+
+            // update next match
+            devices[i].next_match += dev_freq[i];
+        }
+    }
 }
 

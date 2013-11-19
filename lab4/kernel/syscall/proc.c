@@ -27,13 +27,20 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
   return 1; /* remove this line after adding your code */
 }
 
-int event_wait(unsigned int dev  __attribute__((unused)))
+int event_wait(unsigned int dev)
 {
-  return 1; /* remove this line after adding your code */	
+    if (dev >= NUM_DEVICES) {
+        printf("%uth dev is out of the device range", dev);
+        return -EINVAL;
+    }
+    // wait for device running
+    dev_wait(dev);
+
+    return 0;
 }
 
 /* An invalid syscall causes the kernel to exit. */
-void invalid_syscall(unsigned int call_num  __attribute__((unused)))
+void invalid_syscall(unsigned int call_num)
 {
 	printf("Kernel panic: invalid syscall -- 0x%08x\n", call_num);
 
