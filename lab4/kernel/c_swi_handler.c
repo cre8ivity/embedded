@@ -35,6 +35,18 @@ void c_swi_handler(int swi_num, size_t *args) {
         case EVENT_WAIT:
             args[0] = event_wait((unsigned int)args[0]);
             break;
+        case CREATE_SWI:
+            args[0] = task_create((task_t*)args[0], (size_t)args[1]);
+            break;
+        case MUTEX_CREATE:
+            args[0] = mutex_create();
+            break;
+        case MUTEX_LOCK:
+            args[0] = mutex_lock((int)args[0]);
+            break;
+        case MUTEX_UNLOCK:
+            args[0] = mutex_unlock(int)args[0]);
+            break;
         default:
             //invalid swi_number, print error message and exit
             printf("Invalid System Call\n");

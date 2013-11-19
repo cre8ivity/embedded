@@ -10,7 +10,7 @@
  * @date   2008-11-21
  */
 
-	.file "ctx_switch_asm.S"
+    .file "ctx_switch_asm.S"
 
 #include <asm.h>
 #include <arm/psr.h>
@@ -25,23 +25,28 @@
  * Upon completion, we should be in user mode.
  */
 FUNC(launch_task)
-	mov     r0, r5
-	mov     r1, #0
-	mov     r2, #0
-	mov     r3, #0
-	mov     r5, #0
-	mov     r8, #0
-	mov     ip, #0
-	msr     cpsr_c, #(PSR_MODE_USR)
-	mov     sp, r6
-	mov     r6, #0
-	ldr     lr, =0xdeadbeef   /* Causes a crash instead of calling the reset vector */
-	mov     pc, r4
+    mov     r0, r5
+    mov     r1, #0
+    mov     r2, #0
+    mov     r3, #0
+    mov     r5, #0
+    mov     r8, #0
+    mov     ip, #0
+    msr     cpsr_c, #(PSR_MODE_USR)
+    mov     sp, r6
+    mov     r6, #0
+    ldr     lr, =0xdeadbeef   /* Causes a crash instead of calling the reset vector */
+    mov     pc, r4
 
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
+    stmfd r1!, {r4-r11,sp,lr}
+    ldmfd r0!, {r4-r11,sp,lr}
+    mov pc, lr
 
 
-/*add your code to perform a half context switch */	
+/*add your code to perform a half context switch */ 
 FUNC(ctx_switch_half)
+    ldmfd r0!, {r4-r11,sp,lr}
+    mov pc, lr

@@ -26,9 +26,10 @@ static tcb_t* cur_tcb;
  * Set the initialization thread's priority to IDLE so that anything
  * will preempt it when dispatching the first task.
  */
-void dispatch_init(tcb_t* idle __attribute__((unused)))
+void dispatch_init(tcb_t* idle)
 {
-	
+	cur_tcb = idle;
+    ctx_switch_half(&(idle->context));
 }
 
 

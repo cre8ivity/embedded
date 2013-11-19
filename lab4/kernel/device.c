@@ -85,7 +85,7 @@ void dev_update(unsigned long millis)
     int i;
 	for (i = 0; i < NUM_DEVICES; i++) {
         // if a devices task match the time the add all sleep takes to the run queue
-        if (devices[i].next_match == millis) {
+        if (devices[i].next_match <= millis) {
             while (devices[i].sleep_queue) {
                 tcb_t* head = devices[i].sleep_queue;
                 runqueue_add(head, head->cur_prio);
