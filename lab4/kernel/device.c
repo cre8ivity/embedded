@@ -99,5 +99,8 @@ void dev_update(unsigned long millis)
             devices[i].next_match += dev_freq[i];
         }
     }
+
+    // do context switch after the devices state are updated
+    dispatch_save();
 }
 

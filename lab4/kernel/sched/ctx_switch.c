@@ -43,7 +43,23 @@ void dispatch_init(tcb_t* idle)
  */
 void dispatch_save(void)
 {
-	
+    uint8_t highest_task_prio;
+    tcb_t *next_task_tcb, tmp_cur_tcb;
+
+    // get the highest_task priority
+    highest_task_prio = highest_prio();
+
+    // switch context only when current running task is not the highest prio-task
+    if (highest_task_prio != cur_tcb->cur_prio) {
+        runqueue_add(cur_tcb, cur_tcb->cur_prio);
+        next_task_tcb = runqueue_remove(highest_task_prio);
+
+        // change current tcb and do context switch
+        tmp_cur_tcb = cur_tcb;
+        cur_tcb = next_task_tcb;
+
+        ctx_switch_full(cur_tcb->context, tmp_cur_tcb->context);
+    }
 }
 
 /**
@@ -53,8 +69,16 @@ void dispatch_save(void)
  * There is always an idle task to switch to.
  */
 void dispatch_nosave(void)
-{
+{   
+    // get the highest priority task and directly switch to it
+    uint8_t highest_task_prio = highest_prio();
 
+    // switch context only when current running task is not the highest prio-task
+    // in case there is only idle task running
+    if (highest_task_prio != cur_tcb->cur_prio) {
+        cur_tcb = runqueue_remove(highest_task_prio);
+        ctx_switch_half(cur_tcb->context);
+    }
 }
 
 
@@ -66,7 +90,23 @@ void dispatch_nosave(void)
  */
 void dispatch_sleep(void)
 {
-	
+	uint8_t highest_task_prio;
+    tcb_t *next_task_tcb, tmp_cur_tcb;
+
+    // get the highest_task priority
+    highest_task_prio = highest_prio();
+
+    // switch context only when current running task is not the highest prio-task
+    // do not add the current task into running queue
+    if (highest_task_prio != cur_tcb->cur_prio) {
+        next_task_tcb = runqueue_remove(highest_task_prio);
+
+        // change current tcb and do context switch
+        tmp_cur_tcb = cur_tcb;
+        cur_tcb = next_task_tcb;
+
+        ctx_switch_full(cur_tcb->context, tmp_cur_tcb->context);
+    }
 }
 
 /**
@@ -74,7 +114,7 @@ void dispatch_sleep(void)
  */
 uint8_t get_cur_prio(void)
 {
-	return 1; //fix this; dummy return to prevent compiler warning
+	return cur_tcb->cur_prio;
 }
 
 /**
