@@ -13,26 +13,27 @@
 #include <sched.h>
 #include "sched_i.h"
 
+#define OSTCBX_MASK 0x07
+#define OSTCBY_SHIFT 3
 
-
-static tcb_t* run_list[OS_MAX_TASKS]  __attribute__((unused));
+static tcb_t* run_list[OS_MAX_TASKS];
 
 /* A high bit in this bitmap means that the task whose priority is
  * equal to the bit number of the high bit is runnable.
  */
-static uint8_t run_bits[OS_MAX_TASKS/8] __attribute__((unused));
+static uint8_t run_bits[OS_MAX_TASKS/8];
 
 /* This is a trie structure.  Tasks are grouped in groups of 8.  If any task
  * in a particular group is runnable, the corresponding group flag is set.
  * Since we can only have 64 possible tasks, a single byte can represent the
  * run bits of all 8 groups.
  */
-static uint8_t group_run_bits __attribute__((unused));
+static uint8_t group_run_bits;
 
 /* This unmap table finds the bit position of the lowest bit in a given byte
  * Useful for doing reverse lookup.
  */
-static uint8_t prio_unmap_table[]  __attribute__((unused)) =
+static uint8_t prio_unmap_table[] =
 {
 
 0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
@@ -58,8 +59,14 @@ static uint8_t prio_unmap_table[]  __attribute__((unused)) =
  */
 void runqueue_init(void)
 {
-	
+    int i;
+
+	group_run_bits = 0;
+    for (i = 0; i < OS_MAX_TASKS/8; i++) {
+        run_bits[i] = NULL;
+    }
 }
+
 
 /**
  * @brief Adds the thread identified by the given TCB to the runqueue at
@@ -69,9 +76,20 @@ void runqueue_init(void)
  * only requirement is that the run queue for that priority is empty.  This
  * function needs to be externally synchronized.
  */
-void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
+void runqueue_add(tcb_t* tcb, uint8_t prio)
 {
-	
+	uint8_t oxtcbx, oxtcby;
+
+    oxtcbx = prio & OSTCBX_MASK;
+    oxtcby = prio >> OSTCBY_SHIFT;
+
+    // set up the oxtcbx in run bits
+    run_bits[oxtcbx] |= (1 << oxtcbx);
+    // set up the oxtcby in group run bits
+    group_run_bits |= (1 << oxtcby);
+
+    // update run list
+    run_list[prio] = tcb;
 }
 
 
@@ -82,9 +100,26 @@ void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute
  *
  * This function needs to be externally synchronized.
  */
-tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
+tcb_t* runqueue_remove(uint8_t prio)
 {
-	return (tcb_t *)1; // fix this; dummy return to prevent warning messages	
+    uint8_t oxtcbx, oxtcby; 
+    tcb_t* return_tcb = run_list[prio];
+
+    oxtcbx = prio & OSTCBX_MASK;
+    oxtcby = prio >> OSTCBY_SHIFT;
+
+    // clear the bit of oxtcbx
+    run_bits[oxtcbx] &= (~(1 << oxtcbx));
+    // clear the bit of oxtcby if the group is 0
+    if (!run_bits[oxtcbx]) {
+        group_run_bits &= (~(1 << oxtcby));
+    }
+
+
+    // update run list
+    run_list[prio] = NULL;
+
+	return return_tcb;	
 }
 
 /**
@@ -93,5 +128,10 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
  */
 uint8_t highest_prio(void)
 {
-	return 1; // fix this; dummy return to prevent warning messages	
+	uint8_t oxtcbx, oxtcby;
+
+    oxtcby = prio_unmap_table[group_run_bits];
+    oxtcbx = prio_unmap_table[run_bits[oxtcby]];
+
+    return (oxtcby << OSTCBY_SHIFT) + oxtcbx;
 }
