@@ -7,6 +7,7 @@
  */
 
 #include <asm.h>
+#include <bits/swi.h>
 
 	.file "task_create.S"
 
@@ -20,3 +21,4 @@ FUNC(task_create)
     mov     r0, #-1         
 end:
     mov     pc, lr          @return
+
