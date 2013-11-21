@@ -12,6 +12,7 @@
 #include <bits/stack.h>
 #include <exports.h>
 #include <syscall.h>
+#include <lock.h>
 
 /*
  *swi dispatcher, *arg is the address of sp in swi_handler.S
@@ -45,7 +46,7 @@ void c_swi_handler(int swi_num, size_t *args) {
             args[0] = mutex_lock((int)args[0]);
             break;
         case MUTEX_UNLOCK:
-            args[0] = mutex_unlock(int)args[0]);
+            args[0] = mutex_unlock((int)args[0]);
             break;
         default:
             //invalid swi_number, print error message and exit

@@ -17,8 +17,9 @@
 #include <bits/errno.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
-#ifdef DEBUG_MUTEX
 #include <exports.h> // temp
+#ifdef DEBUG_MUTEX
+
 #endif
 
 mutex_t gtMutex[OS_NUM_MUTEX];
@@ -32,7 +33,7 @@ void mutex_init()
     for (i = 0; i < OS_NUM_MUTEX; i++) {
         gtMutex[i].bAvailable = TRUE;
         gtMutex[i].pHolding_Tcb = NULL;
-        gtMutex[i].block = FALSE;
+        gtMutex[i].bLock = FALSE;
         gtMutex[i].pSleep_queue = NULL;
     }
 
@@ -46,7 +47,7 @@ int mutex_create(void)
     disable_interrupts();
 
 	if (allocated_mutex >= OS_NUM_MUTEX) {
-        printf("No available mutex any more!");
+        puts("No available mutex any more!");
         return_val = -ENOMEM;
     } else {
     // have available mutex in the pool
@@ -62,13 +63,13 @@ int mutex_lock(int mutex)
 {
     int return_val = 0;
     mutex_t* target;
-    tcb_t* current_tcb, tmp_tcb;
+    tcb_t *current_tcb, *tmp_tcb;
 
     disable_interrupts();
 
     // mutex number out of bound or not allocated
 	if (mutex < 0 || mutex >= allocated_mutex) {
-        printf("The mutex number is no available!");
+        puts("The mutex number is no available!");
         return_val = -EINVAL;
 
     } else {
@@ -77,13 +78,13 @@ int mutex_lock(int mutex)
 
         // the current task is already holding the lock
         if (target->pHolding_Tcb == current_tcb) {
-            printf("The current task is already holding the lock!");
+            puts("The current task is already holding the lock!");
             return_val = -EDEADLOCK;
 
         } else {
             // can not get the lock, add to sleep queue and 
             // make current task sleep
-            if (target->block) {
+            if (target->bLock) {
                 // add it to sleep queue
                 if (!target->pSleep_queue) {
                     target->pSleep_queue = current_tcb;
@@ -115,13 +116,13 @@ int mutex_unlock(int mutex)
 {
 	int return_val = 0;
     mutex_t* target;
-    tcb_t* current_tcb, tmp_tcb;
+    tcb_t *current_tcb, *tmp_tcb;
 
     disable_interrupts();
 
     // mutex number out of bound or not allocated
     if (mutex < 0 || mutex >= allocated_mutex) {
-        printf("The mutex number is no available!");
+        puts("The mutex number is no available!");
         return_val = -EINVAL;
 
     } else {
@@ -130,7 +131,7 @@ int mutex_unlock(int mutex)
 
         // the current task does not hold the lock
         if (target->pHolding_Tcb != current_tcb) {
-            printf("The current task does not hold the lock!");
+            puts("The current task does not hold the lock!");
             return_val = -EPERM;
 
         } else {

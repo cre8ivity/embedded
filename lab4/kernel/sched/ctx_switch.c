@@ -44,7 +44,7 @@ void dispatch_init(tcb_t* idle)
 void dispatch_save(void)
 {
     uint8_t highest_task_prio;
-    tcb_t *next_task_tcb, tmp_cur_tcb;
+    tcb_t *next_task_tcb, *tmp_cur_tcb;
 
     // get the highest_task priority
     highest_task_prio = highest_prio();
@@ -58,7 +58,7 @@ void dispatch_save(void)
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
 
-        ctx_switch_full(cur_tcb->context, tmp_cur_tcb->context);
+        ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
 }
 
@@ -77,7 +77,7 @@ void dispatch_nosave(void)
     // in case there is only idle task running
     if (highest_task_prio != cur_tcb->cur_prio) {
         cur_tcb = runqueue_remove(highest_task_prio);
-        ctx_switch_half(cur_tcb->context);
+        ctx_switch_half(&(cur_tcb->context));
     }
 }
 
@@ -91,7 +91,7 @@ void dispatch_nosave(void)
 void dispatch_sleep(void)
 {
 	uint8_t highest_task_prio;
-    tcb_t *next_task_tcb, tmp_cur_tcb;
+    tcb_t *next_task_tcb, *tmp_cur_tcb;
 
     // get the highest_task priority
     highest_task_prio = highest_prio();
@@ -105,7 +105,7 @@ void dispatch_sleep(void)
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
 
-        ctx_switch_full(cur_tcb->context, tmp_cur_tcb->context);
+        ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
 }
 

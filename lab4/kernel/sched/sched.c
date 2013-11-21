@@ -20,6 +20,8 @@
 
 tcb_t system_tcb[OS_MAX_TASKS]; /*allocate memory for system TCBs */
 
+static void idle(void);
+
 /**
  * Set up the context of a task and add to running queue
  */
@@ -28,9 +30,9 @@ void context_create(task_t* task, size_t priority) {
     system_tcb[priority].native_prio = priority;
     system_tcb[priority].cur_prio = priority;
 
-    system_tcb[priority].context.r4 = task->lambda;
-    system_tcb[priority].context.r5 = task->data;
-    system_tcb[priority].context.r6 = task->stack_pos;
+    system_tcb[priority].context.r4 = (uint32_t)task->lambda;
+    system_tcb[priority].context.r5 = (uint32_t)task->data;
+    system_tcb[priority].context.r6 = (uint32_t)task->stack_pos;
     // lauch this task when first run
     system_tcb[priority].context.lr = launch_task;
 
@@ -86,7 +88,7 @@ void allocate_tasks(task_t** tasks, size_t num_tasks)
     size_t i;
     // set up tasks context and put them into runqueue
     for (i = 0; i < num_tasks; i++) {
-        context_create(&((*tasks)[i]), i);
+        context_create(&((*tasks)[i]), i+1);
     }
 }
 

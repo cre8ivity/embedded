@@ -10,6 +10,7 @@
 #include <arm/reg.h>
 #include <arm/timer.h>
 #include <arm/interrupt.h>
+#include <device.h>
 
 extern volatile uint64_t systime;
 

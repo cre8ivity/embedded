@@ -8,19 +8,19 @@
  * Date:    22:10 & 11/17/2013
  */
 
-#include <bits/stack.h>
-#include <exports.h>
-#include <arm/psr.h>
-#include <arm/exception.h>
-#include <arm/interrupt.h>
-#include <arm/timer.h>
-#include <arm/reg.h>
-#include <syscall.h>
 #include <kernel.h>
 #include <task.h>
 #include <sched.h>
 #include <device.h>
 #include <assert.h>
+#include <arm/psr.h>
+#include <arm/exception.h>
+#include <arm/interrupt.h>
+#include <arm/timer.h>
+#include <arm/reg.h>
+#include <exports.h>
+#include <bits/stack.h>
+#include <syscall.h>
 
 #define INSTUCT_MASK 0xe59ff000
 #define LOAD_PC 0xe51ff004

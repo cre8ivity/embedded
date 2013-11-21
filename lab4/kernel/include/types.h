@@ -25,8 +25,8 @@
 
 typedef enum bool_e
 {
-	FALSE = 0,
-	TRUE
+    FALSE = 0,
+    TRUE
 } bool_e;
 
 typedef unsigned long       size_t;
@@ -92,5 +92,6 @@ typedef uint32_t            uintptr_t;
 #define LONG_MIN     INT32_MIN
 #define LLONG_MIN    INT64_MIN
 
+#define NULL         0
 
 #endif /* _BITS_TYPES_H_ */

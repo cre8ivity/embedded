@@ -90,9 +90,9 @@ void dev_update(unsigned long millis)
                 tcb_t* head = devices[i].sleep_queue;
                 runqueue_add(head, head->cur_prio);
                 // go to the next sleep task
-                devices[i].sleep_queue = head.sleep_queue;
+                devices[i].sleep_queue = head->sleep_queue;
                 // set the current task's next to null
-                head.sleep_queue = null;
+                head->sleep_queue = NULL;
             }
 
             // update next match

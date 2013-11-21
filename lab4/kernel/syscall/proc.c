@@ -21,10 +21,14 @@
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
+#include <lock.h>
+#include <sched.h>
+#include "sched_i.h"
+
 
 int task_create(task_t* tasks, size_t num_tasks)
 {
-    int i, j;
+    unsigned int i, j;
     task_t idle_task_t;
     task_t tmp;
 
