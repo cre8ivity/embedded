@@ -8,7 +8,7 @@
 
 #include <types.h>
 #include <assert.h>
-
+#include <exports.h>
 #include <kernel.h>
 #include <sched.h>
 #include "sched_i.h"
@@ -54,6 +54,10 @@ static uint8_t prio_unmap_table[] =
 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 };
 
+
+void print_runqueue();
+void print_tcb_t(tcb_t* t);
+
 /**
  * @brief Clears the run-queues and sets them all to empty.
  */
@@ -63,7 +67,7 @@ void runqueue_init(void)
 
 	group_run_bits = 0;
     for (i = 0; i < OS_MAX_TASKS/8; i++) {
-        run_bits[i] = NULL;
+        run_bits[i] = 0;
     }
 }
 
@@ -84,12 +88,14 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
     oxtcby = prio >> OSTCBY_SHIFT;
 
     // set up the oxtcbx in run bits
-    run_bits[oxtcbx] |= (1 << oxtcbx);
+    run_bits[oxtcby] |= (1 << oxtcbx);
     // set up the oxtcby in group run bits
     group_run_bits |= (1 << oxtcby);
 
     // update run list
     run_list[prio] = tcb;
+    print_runqueue();
+    printf("in runqueue_add\n");
 }
 
 
@@ -109,16 +115,18 @@ tcb_t* runqueue_remove(uint8_t prio)
     oxtcby = prio >> OSTCBY_SHIFT;
 
     // clear the bit of oxtcbx
-    run_bits[oxtcbx] &= (~(1 << oxtcbx));
+    run_bits[oxtcby] &= (~(1 << oxtcbx));
     // clear the bit of oxtcby if the group is 0
-    if (!run_bits[oxtcbx]) {
+    if (!run_bits[oxtcby]) {
         group_run_bits &= (~(1 << oxtcby));
     }
 
 
     // update run list
     run_list[prio] = NULL;
-
+    print_runqueue();
+    print_tcb_t(return_tcb);
+    printf("launch_task address: %x\n", (unsigned int)&launch_task);
 	return return_tcb;	
 }
 
@@ -134,4 +142,24 @@ uint8_t highest_prio(void)
     oxtcbx = prio_unmap_table[run_bits[oxtcby]];
 
     return (oxtcby << OSTCBY_SHIFT) + oxtcbx;
+}
+
+void print_runqueue()
+{   
+    int i;
+
+    printf("group_run_bits: %x\n", group_run_bits);
+    printf("run_bits:\n");
+    for (i = 0; i < OS_MAX_TASKS/8; i++) {
+        printf("%x, ", run_bits[i]);
+    }
+    printf("\n");
+}
+
+void print_tcb_t(tcb_t* t)
+{
+    printf("printing tcb_t:\n");
+    sched_context_t context = t->context;
+    printf("r4: %x, r5: %x, r6: %x\n", context.r4, context.r5, context.r6);
+    printf("sp: %x, lr: %x\n", (uint32_t)context.sp, (uint32_t)context.lr);
 }

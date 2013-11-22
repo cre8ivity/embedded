@@ -61,6 +61,7 @@ void dev_init(void)
  */
 void dev_wait(unsigned int dev)
 {   
+    disable_interrupts();
     // get the current task's tcb, no need to handle fault dev
 	tcb_t* current_task_tcb = get_cur_tcb();
 
@@ -82,6 +83,7 @@ void dev_wait(unsigned int dev)
  */
 void dev_update(unsigned long millis)
 {
+    disable_interrupts();
     int i;
 	for (i = 0; i < NUM_DEVICES; i++) {
         // if a devices task match the time the add all sleep takes to the run queue

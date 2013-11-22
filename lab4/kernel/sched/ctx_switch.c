@@ -9,10 +9,13 @@
 
 #include <types.h>
 #include <assert.h>
-
 #include <config.h>
 #include <kernel.h>
 #include "sched_i.h"
+#include <exports.h>
+#include <arm/psr.h>
+#include <arm/exception.h>
+
 
 #ifdef DEBUG_MUTEX
 #include <exports.h>
@@ -28,8 +31,8 @@ static tcb_t* cur_tcb;
  */
 void dispatch_init(tcb_t* idle)
 {
-	cur_tcb = idle;
-    ctx_switch_half(&(idle->context));
+    cur_tcb = idle;
+    //ctx_switch_half(&(idle->context));
 }
 
 
@@ -43,6 +46,7 @@ void dispatch_init(tcb_t* idle)
  */
 void dispatch_save(void)
 {
+    disable_interrupts();
     uint8_t highest_task_prio;
     tcb_t *next_task_tcb, *tmp_cur_tcb;
 
@@ -57,9 +61,10 @@ void dispatch_save(void)
         // change current tcb and do context switch
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
-
+        //enable_interrupts();
         ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
+    enable_interrupts();
 }
 
 /**
@@ -70,6 +75,7 @@ void dispatch_save(void)
  */
 void dispatch_nosave(void)
 {   
+    disable_interrupts();
     // get the highest priority task and directly switch to it
     uint8_t highest_task_prio = highest_prio();
 
@@ -77,8 +83,10 @@ void dispatch_nosave(void)
     // in case there is only idle task running
     if (highest_task_prio != cur_tcb->cur_prio) {
         cur_tcb = runqueue_remove(highest_task_prio);
+        //enable_interrupts();
         ctx_switch_half(&(cur_tcb->context));
     }
+    enable_interrupts();
 }
 
 
@@ -90,7 +98,8 @@ void dispatch_nosave(void)
  */
 void dispatch_sleep(void)
 {
-	uint8_t highest_task_prio;
+    disable_interrupts();
+    uint8_t highest_task_prio;
     tcb_t *next_task_tcb, *tmp_cur_tcb;
 
     // get the highest_task priority
@@ -104,9 +113,10 @@ void dispatch_sleep(void)
         // change current tcb and do context switch
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
-
+        //enable_interrupts();
         ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
+    enable_interrupts();
 }
 
 /**

@@ -11,8 +11,8 @@
 
     .global swi_handler
 swi_handler:
-    stmfd   sp, {sp, lr}^
-    sub     sp, sp, #8
+    @stmfd   sp, {sp, lr}^
+    @sub     sp, sp, #8
 
 
     sub     sp, sp, #4          @leave room on stack for SPSR
@@ -35,7 +35,7 @@ swi_handler:
     add     sp, sp, #4          @remove space used to store SPSR
 
 
-    ldmfd   sp, {sp,lr}^
-    add     sp, sp, #8 
+    @ldmfd   sp, {sp,lr}^
+    @add     sp, sp, #8 
 
     movs    pc, lr              @return to user mode

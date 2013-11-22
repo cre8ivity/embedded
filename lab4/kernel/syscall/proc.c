@@ -18,16 +18,18 @@
 
 #include <arm/reg.h>
 #include <arm/psr.h>
-#include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
 #include <lock.h>
 #include <sched.h>
 #include "sched_i.h"
+#include <arm/exception.h>
 
 
 int task_create(task_t* tasks, size_t num_tasks)
 {
+    disable_interrupts();
+    printf("task_create: 1\n");
     unsigned int i, j;
     task_t idle_task_t;
     task_t tmp;
@@ -53,15 +55,22 @@ int task_create(task_t* tasks, size_t num_tasks)
         }
     }
 
+    printf("task_create: 2\n");
 
     // initial device, mutex and runqueue
     dev_init();
+    printf("task_create: 3\n");
+
     mutex_init();
+    printf("task_create: 4\n");
+
     runqueue_init();
+    printf("task_create: 5\n");
+
 
     //sort tasks, high frequency task has higher priority
     for (i = 0; i < num_tasks; i++) {
-        for (j = i+1; j < num_tasks; i++) {
+        for (j = i+1; j < num_tasks; j++) {
             // bubble sort, swap
             if (tasks[j].T < tasks[i].T) {
                 tmp = tasks[j];
@@ -70,17 +79,25 @@ int task_create(task_t* tasks, size_t num_tasks)
             }
         }
     }
+    printf("task_create: brefore 6\n");
 
     // allocate the task and put into running queue
     allocate_tasks(&tasks, num_tasks);
+    printf("task_create: 6\n");
+
 
     // set up the tcb for idle task and put into running queue
     sched_init(&idle_task_t);
+    printf("task_create: 7\n");
+
 
     // make the idle task schedulable
     dispatch_init(&system_tcb[IDLE_PRIO]);
+    printf("task_create: 8\n");
 
     dispatch_nosave();
+
+    //enable_interrupts();
 
     return 1;
 }

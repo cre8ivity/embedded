@@ -15,8 +15,8 @@
 
 #include <arm/reg.h>
 #include <arm/psr.h>
-#include <arm/exception.h>
 #include <arm/physmem.h>
+#include <arm/exception.h>
 
 tcb_t system_tcb[OS_MAX_TASKS]; /*allocate memory for system TCBs */
 
@@ -33,6 +33,8 @@ void context_create(task_t* task, size_t priority) {
     system_tcb[priority].context.r4 = (uint32_t)task->lambda;
     system_tcb[priority].context.r5 = (uint32_t)task->data;
     system_tcb[priority].context.r6 = (uint32_t)task->stack_pos;
+    system_tcb[priority].context.sp = (void*)system_tcb[priority].kstack_high;
+
     // lauch this task when first run
     system_tcb[priority].context.lr = launch_task;
 
@@ -41,6 +43,7 @@ void context_create(task_t* task, size_t priority) {
 
 
     // add to running queue
+    printf("in context_create\n");
     runqueue_add(&system_tcb[priority], priority);
 }
 
