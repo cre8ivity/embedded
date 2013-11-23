@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <lock.h>
 
+
 // only fun1 can create the mutex
 int mutex_use = -1;
 
@@ -26,27 +27,28 @@ void fun1(void* str)
     mutex_use = mutex_create();
     while(1)
     {
-        putchar((int)str);
         mutex_lock(mutex_use);
         puts("I am in fun1, going to sleep!");
-        sleep(1000);
+        sleep(5000);
         puts("I am awake from fun1");
         mutex_unlock(mutex_use);
+        if (event_wait(0) < 0)
+            panic("fun1 failed");
     }
 }
 
 void fun2(void* str)
 {
     // let fun1 create the mutex
-    sleep(3000);
+    //sleep(3000);
     while(1)
     {
-        putchar((int)str);
         mutex_lock(mutex_use);
         puts("I am in fun2, going to sleep!");
-        sleep(1000);
         puts("I am awake from fun2");
         mutex_unlock(mutex_use);
+        if (event_wait(1) < 0)
+            panic("fun2 failed");
     }
 }
 

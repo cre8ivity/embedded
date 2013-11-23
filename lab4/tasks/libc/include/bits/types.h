@@ -5,6 +5,14 @@
  *         Corresponds to ANSI C99 stdint.h, stddef.h and limits.h
  *
  * @note   Other standard foo that needs to be defined are defined here.
+ *
+ * @date   2006-05-21
+ * @date   2008-10-29 (added limits)
+ * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
+ *
+ * @date   2006-05-21
+ * @date   2008-10-29 (added limits)
+ * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
  */
 
 #ifndef _BITS_TYPES_H_
@@ -14,6 +22,7 @@
 #ifndef ASSEMBLER
 
 #define offsetof(type, member)  ((size_t)(&(((type *)0)->member)))
+
 
 typedef unsigned long       size_t;
 typedef long                ssize_t;
@@ -78,5 +87,6 @@ typedef uint32_t            uintptr_t;
 #define LONG_MIN     INT32_MIN
 #define LLONG_MIN    INT64_MIN
 
+#define NULL         0
 
 #endif /* _BITS_TYPES_H_ */

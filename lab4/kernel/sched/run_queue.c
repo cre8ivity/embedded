@@ -93,7 +93,8 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
     group_run_bits |= (1 << oxtcby);
 
     // update run list
-    run_list[prio] = &system_tcb[prio];
+    //run_list[prio] = &system_tcb[prio];
+    run_list[prio] = tcb;
     //printf("----------------\n");
     //printf("in runqueue_add\n\n");
     //printf("prio address: %x, tcb address: %x\n", (unsigned int)&prio, (unsigned int)tcb);
@@ -113,7 +114,8 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
 tcb_t* runqueue_remove(uint8_t prio)
 {
     uint8_t oxtcbx, oxtcby; 
-    tcb_t* return_tcb =  &system_tcb[prio];
+    //tcb_t* return_tcb =  &system_tcb[prio];
+    tcb_t* return_tcb = run_list[prio];
     //printf("--------------return_tcb address: %x\n", (unsigned int)return_tcb);
 
 
