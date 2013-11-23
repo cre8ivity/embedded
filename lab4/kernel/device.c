@@ -96,6 +96,7 @@ void dev_update(unsigned long millis)
         // if a devices task match the time the add all sleep takes to the run queue
         if (devices[i].next_match <= millis) {
             while (devices[i].sleep_queue) {
+                //print_sleep_queue();
                 tcb_t* head = devices[i].sleep_queue;
                 //printf("devices[%d].next_match: %lu\n", i, devices[i].next_match);
                 //printf("In dev_update: head->cur_prio: %d\n", (int)head->cur_prio);

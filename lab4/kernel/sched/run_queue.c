@@ -97,7 +97,7 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
     run_list[prio] = tcb;
     //printf("----------------\n");
     //printf("in runqueue_add\n\n");
-    //printf("prio address: %x, tcb address: %x\n", (unsigned int)&prio, (unsigned int)tcb);
+    //printf("prio address: %x, tcb address: %x\n", (unsigned int)prio, (unsigned int)tcb);
     //print_runqueue();
     //printf("----------------\n");
 

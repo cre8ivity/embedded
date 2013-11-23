@@ -25,6 +25,8 @@
 mutex_t gtMutex[OS_NUM_MUTEX];
 // the number of mutexs has been allocated up to now
 int allocated_mutex;
+void print_mutex_sleep_queue();
+void print_tcp(tcb_t* tcb);
 
 void mutex_init()
 {
@@ -86,18 +88,24 @@ int mutex_lock(int mutex)
             // make current task sleep
             if (target->bLock) {
                 // add it to sleep queue
-                if (!target->pSleep_queue) {
+                if (!(target->pSleep_queue)) {
                     target->pSleep_queue = current_tcb;
                 } else {
                     // add in the tail
+                    //print_mutex_sleep_queue();
                     tmp_tcb = target->pSleep_queue;
-                    while(!tmp_tcb->sleep_queue) {
+                    //print_tcp(tmp_tcb);
+                    while(tmp_tcb->sleep_queue) {
                         tmp_tcb = tmp_tcb->sleep_queue;
+                        //print_tcp(tmp_tcb);
                     }
 
                     tmp_tcb->sleep_queue = current_tcb;
+                    //print_tcp(tmp_tcb);
+                    //printf("current_tcb: ");
+                    //print_tcp(current_tcb);
                 }
-
+                //print_mutex_sleep_queue();
                 dispatch_sleep();
             }
 
@@ -136,6 +144,7 @@ int mutex_unlock(int mutex)
 
         } else {
             // unlock the mutex
+            //print_mutex_sleep_queue();
             target->pHolding_Tcb = NULL;
             target->bLock = FALSE;
             
@@ -154,5 +163,29 @@ int mutex_unlock(int mutex)
 
     enable_interrupts();
     return return_val;
+}
+void print_mutex_sleep_queue(){
+     mutex_t* target;
+     target = &gtMutex[0];
+     tcb_t* current = target->pSleep_queue;
+        printf("Printing sleep queue for mutex[0]:\n");
+        
+        while (current) {
+            printf("-> %d", (int)current->cur_prio);
+            current = current->sleep_queue;
+        }
+        printf("\n");
+}
+
+void print_tcp(tcb_t* tcb) {
+    if (!tcb) {
+        return;
+    } else {
+        printf("tcp: %d", (int)tcb->cur_prio);
+        if (tcb->sleep_queue) {
+            printf(", and next : %d", (int)tcb->sleep_queue->cur_prio);
+        }
+        printf("\n");
+    }
 }
 
