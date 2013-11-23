@@ -59,6 +59,7 @@ void sched_init(task_t* main_task)
     main_task->C = 0;
     main_task->T = 0;
 
+    printf("--------------system_tcb address: %x\n", (unsigned int)&system_tcb[1]);
     // create context and add to running queue
     context_create(main_task, IDLE_PRIO);
 }

@@ -18,7 +18,7 @@
  *swi dispatcher, *arg is the address of sp in swi_handler.S
  */
 void c_swi_handler(int swi_num, size_t *args) {
-    printf("enter into c_swi_hancler\n");
+    //printf("enter into c_swi_hancler\n");
     switch(swi_num) {
         case READ_SWI:
             // execute each function, store the return value to args[0] 
@@ -38,7 +38,7 @@ void c_swi_handler(int swi_num, size_t *args) {
             args[0] = event_wait((unsigned int)args[0]);
             break;
         case CREATE_SWI:
-            printf("enter into c_swi_hancler: CREATE_SWI\n");
+            //printf("enter into c_swi_hancler: CREATE_SWI\n");
             args[0] = task_create((task_t*)args[0], (size_t)args[1]);
             break;
         case MUTEX_CREATE:

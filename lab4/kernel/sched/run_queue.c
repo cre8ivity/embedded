@@ -93,9 +93,13 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
     group_run_bits |= (1 << oxtcby);
 
     // update run list
-    run_list[prio] = tcb;
-    print_runqueue();
-    printf("in runqueue_add\n");
+    run_list[prio] = &system_tcb[prio];
+    //printf("----------------\n");
+    //printf("in runqueue_add\n\n");
+    //printf("prio address: %x, tcb address: %x\n", (unsigned int)&prio, (unsigned int)tcb);
+    //print_runqueue();
+    //printf("----------------\n");
+
 }
 
 
@@ -109,7 +113,9 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
 tcb_t* runqueue_remove(uint8_t prio)
 {
     uint8_t oxtcbx, oxtcby; 
-    tcb_t* return_tcb = run_list[prio];
+    tcb_t* return_tcb =  &system_tcb[prio];
+    //printf("--------------return_tcb address: %x\n", (unsigned int)return_tcb);
+
 
     oxtcbx = prio & OSTCBX_MASK;
     oxtcby = prio >> OSTCBY_SHIFT;
@@ -124,9 +130,13 @@ tcb_t* runqueue_remove(uint8_t prio)
 
     // update run list
     run_list[prio] = NULL;
-    print_runqueue();
-    print_tcb_t(return_tcb);
-    printf("launch_task address: %x\n", (unsigned int)&launch_task);
+    //printf("----------------\n");
+    //printf("in runqueue_remove\n\n");
+    //print_runqueue();
+    //printf("----------------\n");
+
+    //print_tcb_t(return_tcb);
+    //printf("launch_task address: %x\n", (unsigned int)&launch_task);
 	return return_tcb;	
 }
 
@@ -153,7 +163,7 @@ void print_runqueue()
     for (i = 0; i < OS_MAX_TASKS/8; i++) {
         printf("%x, ", run_bits[i]);
     }
-    printf("\n");
+    printf("\n\n");
 }
 
 void print_tcb_t(tcb_t* t)
@@ -161,5 +171,5 @@ void print_tcb_t(tcb_t* t)
     printf("printing tcb_t:\n");
     sched_context_t context = t->context;
     printf("r4: %x, r5: %x, r6: %x\n", context.r4, context.r5, context.r6);
-    printf("sp: %x, lr: %x\n", (uint32_t)context.sp, (uint32_t)context.lr);
+    printf("sp: %x, lr: %x\n\n", (uint32_t)context.sp, (uint32_t)context.lr);
 }

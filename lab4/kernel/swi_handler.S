@@ -11,8 +11,8 @@
 
     .global swi_handler
 swi_handler:
-    @stmfd   sp, {sp, lr}^
-    @sub     sp, sp, #8
+    stmfd   sp, {sp, lr}^
+    sub     sp, sp, #8
 
 
     sub     sp, sp, #4          @leave room on stack for SPSR
@@ -24,7 +24,9 @@ swi_handler:
 
     mrs     r2, spsr
     str     r2, [sp, #14*4]     @store spsr
-    ldr     r8, [sp, #19*4]     @restore r8 for u-boot syscall
+    ldr     r1, =global_data
+    ldr     r8, [r1]
+    @ldr     r8, [sp, #21*4]     @restore r8 for u-boot syscall
     mov     r1, sp
     ldr     r0, [lr, #-4]       @extract the SWI number
     bic     r0, r0, #0xff000000 @mask swi
@@ -35,7 +37,7 @@ swi_handler:
     add     sp, sp, #4          @remove space used to store SPSR
 
 
-    @ldmfd   sp, {sp,lr}^
-    @add     sp, sp, #8 
+    ldmfd   sp, {sp,lr}^
+    add     sp, sp, #8 
 
     movs    pc, lr              @return to user mode

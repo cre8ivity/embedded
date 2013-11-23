@@ -10,7 +10,7 @@
 #include <assert.h>
 
 #include <task.h>
-#include <sched.h>
+#include "sched_i.h"
 #include <device.h>
 #include <arm/reg.h>
 #include <arm/psr.h>
@@ -40,6 +40,8 @@ typedef struct dev dev_t;
 const unsigned long dev_freq[NUM_DEVICES] = {100, 200, 500, 50};
 static dev_t devices[NUM_DEVICES];
 
+void print_sleep_queue();
+
 /**
  * @brief Initialize the sleep queues and match values for all devices.
  */
@@ -63,11 +65,12 @@ void dev_wait(unsigned int dev)
 {   
     disable_interrupts();
     // get the current task's tcb, no need to handle fault dev
-	tcb_t* current_task_tcb = get_cur_tcb();
-
+    tcb_t* current_task_tcb = get_cur_tcb();
+    //printf("In dev_wait: head->cur_prio: %d\n", (int)current_task_tcb->cur_prio);
     // insert the task on the head of device sleep queue
     current_task_tcb->sleep_queue = devices[dev].sleep_queue;
     devices[dev].sleep_queue = current_task_tcb;
+    //print_sleep_queue();
 
     // make it sleep
     dispatch_sleep();
@@ -83,13 +86,19 @@ void dev_wait(unsigned int dev)
  */
 void dev_update(unsigned long millis)
 {
+    //printf("In dev_update: millis: %lu\n", millis);
     disable_interrupts();
+    //printf("in dev_update\n");
+    //print_sleep_queue();
+    //printf("----------------\n");
     int i;
 	for (i = 0; i < NUM_DEVICES; i++) {
         // if a devices task match the time the add all sleep takes to the run queue
         if (devices[i].next_match <= millis) {
             while (devices[i].sleep_queue) {
                 tcb_t* head = devices[i].sleep_queue;
+                //printf("devices[%d].next_match: %lu\n", i, devices[i].next_match);
+                //printf("In dev_update: head->cur_prio: %d\n", (int)head->cur_prio);
                 runqueue_add(head, head->cur_prio);
                 // go to the next sleep task
                 devices[i].sleep_queue = head->sleep_queue;
@@ -104,5 +113,20 @@ void dev_update(unsigned long millis)
 
     // do context switch after the devices state are updated
     dispatch_save();
+}
+
+void print_sleep_queue() {
+    int i;
+    for (i = 0; i < NUM_DEVICES; i++) {
+        tcb_t* current = devices[i].sleep_queue;
+        printf("Pringing sleep queue for device[%d]:\n", i);
+        printf("system_tcb[1]: %d\n", (int)system_tcb[1].cur_prio);
+        printf("system_tcb[2]: %d\n", (int)system_tcb[2].cur_prio);
+        while (current) {
+            printf("-> %d", (int)current->cur_prio);
+            current = current->sleep_queue;
+        }
+        printf("\n");
+    }
 }
 
