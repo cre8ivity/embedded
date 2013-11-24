@@ -28,6 +28,8 @@
 
 int task_create(task_t* tasks, size_t num_tasks)
 {
+
+
     disable_interrupts();
     printf("task_create: 1\n");
     unsigned int i, j;
@@ -42,15 +44,15 @@ int task_create(task_t* tasks, size_t num_tasks)
     // check the task address is in bound
     if (!valid_addr(tasks, sizeof(task_t) * num_tasks, USR_START_ADDR, 
         USR_END_ADDR)) {
-        printf("Invaild task address\n");
+        printf("Invalid task address\n");
         return -EFAULT;
     }
 
     // validate each task
     for (i = 0; i < num_tasks; i++) {
-        if (!tasks[i].lambda || !tasks[i].data || !tasks[i].stack_pos
+        if (!tasks[i].lambda || !tasks[i].stack_pos
             || tasks[i].C > tasks[i].T) {
-            printf("Invaild task %d\n", i);
+            printf("Invalid task %d\n", i);
             return -EFAULT;
         }
     }
@@ -105,7 +107,8 @@ int task_create(task_t* tasks, size_t num_tasks)
 int event_wait(unsigned int dev)
 {
     if (dev >= NUM_DEVICES) {
-        printf("%uth dev is out of the device range", dev);
+        printf("%uth dev is out of the device range\n", dev);
+        dev_wait(dev);
         return -EINVAL;
     }
     // wait for device running

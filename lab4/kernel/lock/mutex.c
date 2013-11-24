@@ -54,6 +54,7 @@ int mutex_create(void)
     } else {
     // have available mutex in the pool
         return_val = allocated_mutex++;
+        printf("in mutex create: num of mutex: %d\n",allocated_mutex);
         gtMutex[return_val].bAvailable = FALSE;
     }
 
@@ -68,10 +69,10 @@ int mutex_lock(int mutex)
     tcb_t *current_tcb, *tmp_tcb;
 
     disable_interrupts();
-
+    //printf("in lock: current mutex num:%d\n",allocated_mutex);
     // mutex number out of bound or not allocated
 	if (mutex < 0 || mutex >= allocated_mutex) {
-        puts("The mutex number is no available!");
+        printf("The mutex number is no available! current mutex num:%d\n",allocated_mutex);
         return_val = -EINVAL;
 
     } else {

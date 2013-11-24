@@ -22,7 +22,7 @@ void panic(const char* str)
     while(1);
 }
 
-void fun1(void* str)
+void fun1()
 {
     mutex_use = mutex_create();
     while(1)
@@ -37,7 +37,7 @@ void fun1(void* str)
     }
 }
 
-void fun2(void* str)
+void fun2()
 {
     // let fun1 create the mutex
     //sleep(3000);
