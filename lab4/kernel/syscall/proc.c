@@ -108,7 +108,6 @@ int event_wait(unsigned int dev)
 {
     if (dev >= NUM_DEVICES) {
         printf("%uth dev is out of the device range\n", dev);
-        dev_wait(dev);
         return -EINVAL;
     }
     // wait for device running
