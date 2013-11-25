@@ -43,7 +43,6 @@ void context_create(task_t* task, size_t priority) {
 
 
     // add to running queue
-    printf("in context_create\n");
     runqueue_add(&system_tcb[priority], priority);
 }
 
@@ -59,7 +58,6 @@ void sched_init(task_t* main_task)
     main_task->C = 0;
     main_task->T = 0;
 
-    printf("--------------system_tcb address: %x\n", (unsigned int)&system_tcb[1]);
     // create context and add to running queue
     context_create(main_task, IDLE_PRIO);
 }

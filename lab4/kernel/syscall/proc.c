@@ -31,7 +31,6 @@ int task_create(task_t* tasks, size_t num_tasks)
 
 
     disable_interrupts();
-    printf("task_create: 1\n");
     unsigned int i, j;
     task_t idle_task_t;
     task_t tmp;
@@ -57,18 +56,11 @@ int task_create(task_t* tasks, size_t num_tasks)
         }
     }
 
-    printf("task_create: 2\n");
 
     // initial device, mutex and runqueue
     dev_init();
-    printf("task_create: 3\n");
-
-    mutex_init();
-    printf("task_create: 4\n");
-
+    // initiating mutex is moved to kmain
     runqueue_init();
-    printf("task_create: 5\n");
-
 
     //sort tasks, high frequency task has higher priority
     for (i = 0; i < num_tasks; i++) {
@@ -81,25 +73,20 @@ int task_create(task_t* tasks, size_t num_tasks)
             }
         }
     }
-    printf("task_create: brefore 6\n");
 
     // allocate the task and put into running queue
     allocate_tasks(&tasks, num_tasks);
-    printf("task_create: 6\n");
 
 
     // set up the tcb for idle task and put into running queue
     sched_init(&idle_task_t);
-    printf("task_create: 7\n");
 
 
     // make the idle task schedulable
     dispatch_init(&system_tcb[IDLE_PRIO]);
-    printf("task_create: 8\n");
 
     dispatch_nosave();
 
-    //enable_interrupts();
 
     return 1;
 }
@@ -108,7 +95,6 @@ int event_wait(unsigned int dev)
 {
     if (dev >= NUM_DEVICES) {
         printf("%uth dev is out of the device range\n", dev);
-        dev_wait(dev);
         return -EINVAL;
     }
     // wait for device running

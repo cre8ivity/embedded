@@ -33,7 +33,6 @@ static tcb_t* cur_tcb;
 void dispatch_init(tcb_t* idle)
 {
     cur_tcb = idle;
-    //ctx_switch_half(&(idle->context));
 }
 
 
@@ -56,14 +55,12 @@ void dispatch_save(void)
 
     // switch context only when current running task is not the highest prio-task
     if (highest_task_prio != 0 && highest_task_prio < cur_tcb->cur_prio) {
-        //printf("highest_task_prio: %d\n", (int)highest_task_prio);
         runqueue_add(cur_tcb, cur_tcb->cur_prio);
         next_task_tcb = runqueue_remove(highest_task_prio);
 
         // change current tcb and do context switch
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
-        //enable_interrupts();
         ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
     enable_interrupts();
@@ -85,7 +82,6 @@ void dispatch_nosave(void)
     // in case there is only idle task running
     if (highest_task_prio < cur_tcb->cur_prio) {
         cur_tcb = runqueue_remove(highest_task_prio);
-        //enable_interrupts();
         ctx_switch_half(&(cur_tcb->context));
     }
     enable_interrupts();
@@ -110,17 +106,11 @@ void dispatch_sleep(void)
     // switch context only when current running task is not the highest prio-task
     // do not add the current task into running queue
     if (highest_task_prio != 0 && highest_task_prio != cur_tcb->cur_prio) {
-        //printf("highest_task_prio: %d\n", (int)highest_task_prio);
         next_task_tcb = runqueue_remove(highest_task_prio);
 
         // change current tcb and do context switch
         tmp_cur_tcb = cur_tcb;
         cur_tcb = next_task_tcb;
-
-        //enable_interrupts();
-        //printf("In dispatch_sleep: \n");
-        //print_sleep_queue();
-        //printf("\n");
         ctx_switch_full(&(cur_tcb->context), &(tmp_cur_tcb->context));
     }
     enable_interrupts();

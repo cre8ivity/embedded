@@ -21,6 +21,7 @@
 #include <exports.h>
 #include <bits/stack.h>
 #include <syscall.h>
+#include <lock.h>
 
 #define INSTUCT_MASK 0xe59ff000
 #define LOAD_PC 0xe51ff004
@@ -41,6 +42,8 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 {
 
 	app_startup();
+   
+
 	global_data = table;
 	
     size_t swi_handler_loc, irq_handler_loc;
@@ -73,6 +76,8 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
     reg_write(OSTMR_OSCR_ADDR, 0);
     //OSMR0 to be 10ms
     reg_write(OSTMR_OSMR_ADDR(0), T10MS);
+
+    mutex_init();
     
     //push u-boot's argc and argv on the user stack
     return_status = exec(argc, argv);
