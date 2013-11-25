@@ -84,6 +84,7 @@ void runqueue_add(tcb_t* tcb, uint8_t prio)
 {
 	uint8_t oxtcbx, oxtcby;
 
+    // get the priority x and y value in map table
     oxtcbx = prio & OSTCBX_MASK;
     oxtcby = prio >> OSTCBY_SHIFT;
 
@@ -111,7 +112,7 @@ tcb_t* runqueue_remove(uint8_t prio)
     uint8_t oxtcbx, oxtcby; 
     tcb_t* return_tcb = run_list[prio];
 
-
+    // get the priority x and y value in map table
     oxtcbx = prio & OSTCBX_MASK;
     oxtcby = prio >> OSTCBY_SHIFT;
 
@@ -142,6 +143,7 @@ uint8_t highest_prio(void)
     return (oxtcby << OSTCBY_SHIFT) + oxtcbx;
 }
 
+// print the current running queue, for debug
 void print_runqueue()
 {   
     int i;
@@ -154,6 +156,7 @@ void print_runqueue()
     printf("\n\n");
 }
 
+// print the tcb's context, for debug
 void print_tcb_t(tcb_t* t)
 {
     printf("printing tcb_t:\n");

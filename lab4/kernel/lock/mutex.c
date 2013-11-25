@@ -26,8 +26,9 @@ mutex_t gtMutex[OS_NUM_MUTEX];
 // the number of mutexs has been allocated up to now
 int allocated_mutex;
 void print_mutex_sleep_queue();
-void print_tcp(tcb_t* tcb);
+void print_tcb(tcb_t* tcb);
 
+// initiate the mutex status array, put in kmain function
 void mutex_init()
 {
 	int i;
@@ -42,12 +43,14 @@ void mutex_init()
     allocated_mutex = 0;
 }
 
+// create a new mutex, update the allocated_mutex
 int mutex_create(void)
 {
     int return_val;
 
     disable_interrupts();
 
+    // error condition
 	if (allocated_mutex >= OS_NUM_MUTEX) {
         puts("No available mutex any more!");
         return_val = -ENOMEM;
@@ -61,6 +64,7 @@ int mutex_create(void)
 	return return_val;
 }
 
+// lock a mutex
 int mutex_lock(int mutex)
 {
     int return_val = 0;
@@ -112,6 +116,7 @@ int mutex_lock(int mutex)
     return return_val;
 }
 
+// unlock the hold mutex
 int mutex_unlock(int mutex)
 {
 	int return_val = 0;
@@ -155,6 +160,8 @@ int mutex_unlock(int mutex)
     enable_interrupts();
     return return_val;
 }
+
+// print out the mutex sleep queue, for debug
 void print_mutex_sleep_queue(){
      mutex_t* target;
      target = &gtMutex[0];
@@ -168,11 +175,12 @@ void print_mutex_sleep_queue(){
         printf("\n");
 }
 
-void print_tcp(tcb_t* tcb) {
+// print out the status of a tcb's sleep queue priority, for debug
+void print_tcb(tcb_t* tcb) {
     if (!tcb) {
         return;
     } else {
-        printf("tcp: %d", (int)tcb->cur_prio);
+        printf("tcb: %d", (int)tcb->cur_prio);
         if (tcb->sleep_queue) {
             printf(", and next : %d", (int)tcb->sleep_queue->cur_prio);
         }
