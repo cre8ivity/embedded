@@ -1,0 +1,6 @@
+PROGS_HLP_OBJS := hlp.o
+PROGS_HLP_OBJS := $(PROGS_HLP_OBJS:%=$(TDIR)/hlp/%)
+ALL_OBJS += $(PROGS_HLP_OBJS)
+
+$(TDIR)/bin/hlp : $(TSTART) $(PROGS_HLP_OBJS) $(TLIBC)
+

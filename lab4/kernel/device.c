@@ -69,6 +69,7 @@ int dev_wait(unsigned int dev)
 
     // check if the current task holds any mutex
     if (current_task_tcb->cur_prio == HLP_PRIO) {
+        printf("current taks has mutex on hand, cannot sleep!\n");
         return EHOLDSLOCK;
     }
 
