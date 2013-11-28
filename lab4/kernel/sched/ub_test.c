@@ -28,7 +28,7 @@
  * @return 1  Test succeeded.  The tasks are now in order.
  */
 
-static double[64] ub_values = {
+static double ub_values[] = {
     1.000000,  0.828427,  0.779763,  0.756828,  0.743492,  0.734772,  0.728627,  0.724062,  
     0.720538,  0.717735,  0.715452,  0.713557,  0.711959,  0.710593,  0.709412,  0.708381,  
     0.707472,  0.706666,  0.705946,  0.705298,  0.704713,  0.704182,  0.703698,  0.703254,  
@@ -36,8 +36,9 @@ static double[64] ub_values = {
     0.700478,  0.700261,  0.700056,  0.699863,  0.699681,  0.699508,  0.699343,  0.699188,  
     0.699040,  0.698898,  0.698764,  0.698636,  0.698513,  0.698396,  0.698284,  0.698176,  
     0.698073,  0.697974,  0.697879,  0.697788,  0.697700,  0.697615,  0.697533,  0.697455,  
-    0.697379,  0.697306,  0.697235,  0.697166,  0.697100,  0.697036,  0.696974,  0.696914 }
+    0.697379,  0.697306,  0.697235,  0.697166,  0.697100,  0.697036,  0.696974,  0.696914 };
 
+static void qsort(unsigned long* task_prio, task_t** task_ptr, int l, int r);
 
 /*
  * First off, sort the input list so that it satisfies rate-monotonicity. 
@@ -45,12 +46,13 @@ static double[64] ub_values = {
  */
 int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-    int i, result = 1;
+    unsigned int i;
+    int result = 1;
     double sum = 0.0, u_value;
     unsigned long task_array[num_tasks];
 
     for (i = 0; i < num_tasks; i++) {
-        task_array[i] = task[i]->T;
+        task_array[i] = tasks[i]->T;
     }
     // sort based on T
     qsort(task_array, tasks, 0, num_tasks - 1);
@@ -70,13 +72,13 @@ int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 
 
-static void qsort(int task_prio[], task_t** task_ptr, int l, int r)
+static void qsort(unsigned long* task_prio, task_t** task_ptr, int l, int r)
 {
-    int i, j, x;
+    unsigned long i, j, x;
     task_t *xp;
     if (l < r) {
-        i = l;
-        j = r;
+        i = (unsigned long)l;
+        j = (unsigned long)r;
         x = task_prio[i];
         xp = task_ptr[i];
         while (i < j)
@@ -95,7 +97,7 @@ static void qsort(int task_prio[], task_t** task_ptr, int l, int r)
             }
 
             if(i < j) {  
-                task_prio[j = task_prio[i];
+                task_prio[j] = task_prio[i];
                 task_ptr[j--] = task_ptr[i];
             }
         }
