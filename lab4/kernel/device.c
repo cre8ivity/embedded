@@ -8,7 +8,7 @@
 
 #include <types.h>
 #include <assert.h>
-
+#include <bits/errno.h>
 #include <task.h>
 #include "sched_i.h"
 #include <device.h>
@@ -61,17 +61,25 @@ void dev_init(void)
  *
  * @param dev  Device number.
  */
-void dev_wait(unsigned int dev)
+int dev_wait(unsigned int dev)
 {   
     disable_interrupts();
     // get the current task's tcb, no need to handle fault dev
     tcb_t* current_task_tcb = get_cur_tcb();
+
+    // check if the current task holds any mutex
+    if (current_task_tcb->cur_prio == HLP_PRIO) {
+        return EHOLDSLOCK;
+    }
+
     // insert the task on the head of device sleep queue
     current_task_tcb->sleep_queue = devices[dev].sleep_queue;
     devices[dev].sleep_queue = current_task_tcb;
 
     // make it sleep
     dispatch_sleep();
+    
+    return 0;
 }
 
 

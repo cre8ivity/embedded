@@ -93,12 +93,15 @@ int task_create(task_t* tasks, size_t num_tasks)
 
 int event_wait(unsigned int dev)
 {
+    int err;
     if (dev >= NUM_DEVICES) {
         printf("%uth dev is out of the device range\n", dev);
         return -EINVAL;
     }
     // wait for device running
-    dev_wait(dev);
+    if((err = dev_wait(dev)) != 0) {
+        return err;
+    }
 
     return 0;
 }
