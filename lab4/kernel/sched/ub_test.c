@@ -6,7 +6,7 @@
  * @date 2008-11-20
  */
 
-//#define DEBUG 0
+#define DEBUG 1
 
 #include <sched.h>
 #ifdef DEBUG
@@ -38,7 +38,6 @@ static double ub_values[] = {
     0.698073,  0.697974,  0.697879,  0.697788,  0.697700,  0.697615,  0.697533,  0.697455,  
     0.697379,  0.697306,  0.697235,  0.697166,  0.697100,  0.697036,  0.696974,  0.696914 };
 
-static void qsort(unsigned long* task_prio, task_t** task_ptr, int l, int r);
 
 /*
  * First off, sort the input list so that it satisfies rate-monotonicity. 
@@ -46,66 +45,37 @@ static void qsort(unsigned long* task_prio, task_t** task_ptr, int l, int r);
  */
 int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-    unsigned int i;
+    unsigned int i, j;
     int result = 1;
     double sum = 0.0, u_value;
-    unsigned long task_array[num_tasks];
+    task_t* tasks_arr = *tasks;
+    task_t tmp;
 
+    //sort tasks, high frequency task has higher priority
     for (i = 0; i < num_tasks; i++) {
-        task_array[i] = tasks[i]->T;
+        for (j = i+1; j < num_tasks; j++) {
+            // bubble sort, swap
+            if (tasks_arr[j].T < tasks_arr[i].T) {
+                tmp = tasks_arr[j];
+                tasks_arr[j] = tasks_arr[i];
+                tasks_arr[i] = tmp;
+            }
+        }
     }
-    // sort based on T
-    qsort(task_array, tasks, 0, num_tasks - 1);
 
     // UB test
     for (i = 0; i < num_tasks; i++) {
-    	u_value = sum + (tasks[i]->C + tasks[i]->B) * 1.0 / tasks[i]->T;
+        printf("UB_TEST tasks_arr[%i]: C: %d, T: %d, B: %d\n", i, (int)tasks_arr[i].C, (int)tasks_arr[i].T, (int)tasks_arr[i].B);
+
+    	u_value = sum + (1.0 * (tasks_arr[i].C + tasks_arr[i].B)) / (1.0 * tasks_arr[i].T);
     	if (u_value > ub_values[i]) {
     		result = 0;
     		break;
     	}
-    	sum += tasks[i]->C * 1.0 / tasks[i]->T;
+    	sum += (1.0 * tasks_arr[i].C) / (1.0 * tasks_arr[i].T);
     }
 
 	return result;
 }
 
-
-
-static void qsort(unsigned long* task_prio, task_t** task_ptr, int l, int r)
-{
-    unsigned long i, j, x;
-    task_t *xp;
-    if (l < r) {
-        i = (unsigned long)l;
-        j = (unsigned long)r;
-        x = task_prio[i];
-        xp = task_ptr[i];
-        while (i < j)
-        {
-            while(i < j && task_prio[j] > x)  {
-                j--;
-            }
-
-            if(i < j) { 
-                task_prio[i] = task_prio[j];
-                task_ptr[i++] = task_ptr[j];
-            }
-
-            while(i < j && task_prio[i] < x) {
-                i++; 
-            }
-
-            if(i < j) {  
-                task_prio[j] = task_prio[i];
-                task_ptr[j--] = task_ptr[i];
-            }
-        }
-
-        task_prio[i] = x;
-        task_ptr[i] = xp;
-        qsort(task_prio, task_ptr, l, i-1); 
-        qsort(task_prio, task_ptr, i+1, r);
-    }
-}
 

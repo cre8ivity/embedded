@@ -34,6 +34,7 @@ int task_create(task_t* tasks, size_t num_tasks)
     unsigned int i, j;
     task_t idle_task_t;
     task_t tmp;
+    int isSchedulable;
 
     // return if number of task is to large, available task - idle task
     if (num_tasks > OS_AVAIL_TASKS - 1) {
@@ -49,6 +50,7 @@ int task_create(task_t* tasks, size_t num_tasks)
 
     // validate each task
     for (i = 0; i < num_tasks; i++) {
+        printf("reason: C:%d, T:%d\n", (int)tasks[i].C, (int)tasks[i].T);
         if (!tasks[i].lambda || !tasks[i].stack_pos
             || tasks[i].C > tasks[i].T) {
             printf("Invalid task %d\n", i);
@@ -56,6 +58,9 @@ int task_create(task_t* tasks, size_t num_tasks)
         }
     }
 
+    // ub_test
+    isSchedulable = assign_schedule(&tasks, num_tasks);
+    printf("UB_TEST: %d\n", isSchedulable);
 
     // initial device, mutex and runqueue
     dev_init();

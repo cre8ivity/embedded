@@ -1,0 +1,6 @@
+PROGS_UB_OBJS := ub.o
+PROGS_UB_OBJS := $(PROGS_UB_OBJS:%=$(TDIR)/ub/%)
+ALL_OBJS += $(PROGS_UB_OBJS)
+
+$(TDIR)/bin/ub : $(TSTART) $(PROGS_UB_OBJS) $(TLIBC)
+
