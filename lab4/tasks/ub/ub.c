@@ -26,7 +26,7 @@ void fun(void* str)
 	while(1)
 	{	
 		putchar((int)str);
-		if (event_wait((int)str) < 0)
+		if (event_wait(1) < 0)
 			panic("Dev 0 failed");
 	}
 }
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 	task_t tasks[3];
 	for (i = 0; i < 3; i++) {
 		tasks[i].lambda = fun;
-		tasks[i].data = (void*)i;
+		tasks[i].data = (void*)'@';
 		tasks[i].stack_pos = (void*)(0xa2000000 + 0x10000 * i);
 	}
 	tasks[0].C = 100;

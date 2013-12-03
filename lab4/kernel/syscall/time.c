@@ -12,8 +12,6 @@
 #include <arm/timer.h>
 #include <syscall.h>
 
-extern volatile uint64_t systime;
-
 unsigned long time_syscall(void)
 {
     // return the current time by product the ratio
@@ -28,9 +26,9 @@ unsigned long time_syscall(void)
  *
  * 
  */
-void sleep_syscall(unsigned long millis  __attribute__((unused)))
+void sleep_syscall(unsigned long millis)
 {
-    uint64_t curr_time = systime;
+    size_t curr_time = systime;
     // while until the current time is over the setted time
     while (curr_time + millis / TRUE_TIME_RATIO >= systime);
 }

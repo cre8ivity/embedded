@@ -108,6 +108,7 @@ int mutex_lock(int mutex)
             // now, the current task can get the lock
             target->pHolding_Tcb = current_tcb;
             target->bLock = TRUE;
+            current_tcb->holds_lock++;
             current_tcb->cur_prio = HLP_PRIO;
         }
 
@@ -144,7 +145,13 @@ int mutex_unlock(int mutex)
             // unlock the mutex
             target->pHolding_Tcb = NULL;
             target->bLock = FALSE;
-            current_tcb->cur_prio = current_tcb->native_prio;
+            // restore the priority when unlocking
+            if (current_tcb->holds_lock > 0) {
+                current_tcb->holds_lock--;
+                if (!current_tcb->holds_lock) {
+                    current_tcb->cur_prio = current_tcb->native_prio;
+                }
+            }
             
             // awake the first member in sleep queue
             if (target->pSleep_queue != NULL) {

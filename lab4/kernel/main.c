@@ -30,10 +30,9 @@
 #define OFF_MASK 0xfff
 
 uint32_t global_data;
-size_t irq_sp;
 size_t saved_sp_add;
 size_t saved_kernel_cpsr;
-size_t systime = 0;
+volatile size_t systime;
 
 size_t handler_install(size_t vec_loc, size_t handler_func, size_t *cache_inst_1, size_t *cache_inst_2);
 void handler_restore(size_t handler_loc, size_t *cache_inst_1, size_t *cache_inst_2);
@@ -42,9 +41,8 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 {
 
 	app_startup();
-   
-
 	global_data = table;
+    systime = 0;
 	
     size_t swi_handler_loc, irq_handler_loc;
     ssize_t return_status; 
