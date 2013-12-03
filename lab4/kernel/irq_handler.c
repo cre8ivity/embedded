@@ -12,8 +12,8 @@
 #include <arm/interrupt.h>
 #include <exports.h>
 #include <device.h>
+#include <syscall.h>
 
-extern volatile uint64_t systime;
 
 void irq_handler() {
     // figure out if the irq is filed by OMSR0 match

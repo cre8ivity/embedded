@@ -27,4 +27,7 @@ void swi_handler();
 void irq_wrapper();
 ssize_t exec(int argc, char *argv[]);
 
+// system time
+extern volatile size_t systime;
+
 #endif /* SYSCALL_H */

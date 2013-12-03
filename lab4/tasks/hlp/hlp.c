@@ -25,7 +25,7 @@ void panic(const char* str)
 void fun(void* str)
 {
 	int mutex;
-	puts(str);
+	putchar((int)str);
 	
 	mutex = mutex_create();
 
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	task_t tasks[3];
 	for (i = 0; i < 3; i++) {
 		tasks[i].lambda = fun;
-		tasks[i].data = (void*)0;
+		tasks[i].data = (void*)'<';
 		tasks[i].stack_pos = (void*)(0xa2000000 + 0x10000 * i);
 	}
 	tasks[0].C = 100;

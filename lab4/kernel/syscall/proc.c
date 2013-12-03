@@ -31,9 +31,9 @@ int task_create(task_t* tasks, size_t num_tasks)
 
 
     disable_interrupts();
-    unsigned int i, j;
+    unsigned int i;//, j;
     task_t idle_task_t;
-    task_t tmp;
+    //task_t tmp;
     int isSchedulable;
 
     // return if number of task is to large, available task - idle task
@@ -60,7 +60,11 @@ int task_create(task_t* tasks, size_t num_tasks)
 
     // ub_test
     isSchedulable = assign_schedule(&tasks, num_tasks);
-    printf("UB_TEST: %d\n", isSchedulable);
+    if (isSchedulable) {
+        printf("UB_TEST: SUCCESS!\n");
+    } else {
+        printf("UB_TEST: UNSUCCESS!\n");
+    }
 
     // initial device, mutex and runqueue
     dev_init();
@@ -68,7 +72,9 @@ int task_create(task_t* tasks, size_t num_tasks)
     runqueue_init();
 
     //sort tasks, high frequency task has higher priority
-    for (i = 0; i < num_tasks; i++) {
+    //actually we don't need to do this after ub-test,
+    //leave here for the convenience of testing part1
+    /*for (i = 0; i < num_tasks; i++) {
         for (j = i+1; j < num_tasks; j++) {
             // bubble sort, swap
             if (tasks[j].T < tasks[i].T) {
@@ -77,7 +83,7 @@ int task_create(task_t* tasks, size_t num_tasks)
                 tasks[i] = tmp;
             }
         }
-    }
+    }*/
 
     // allocate the task and put into running queue
     allocate_tasks(&tasks, num_tasks);

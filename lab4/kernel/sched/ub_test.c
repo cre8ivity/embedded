@@ -43,7 +43,7 @@ static double ub_values[] = {
  * First off, sort the input list so that it satisfies rate-monotonicity. 
  * Then run the UB test on it to see if the given task set is schedulable.
  */
-int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
+int assign_schedule(task_t** tasks , size_t num_tasks)
 {
     unsigned int i, j;
     int result = 1;
