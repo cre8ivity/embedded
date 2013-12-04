@@ -15,7 +15,7 @@ Also, we designed a UB admission control algorithm to verify the schedulability 
 
 
 --------------------------------------------------------------------------------
-Part 1: Design & Implementation
+Part 2: Design & Implementation
 --------------------------------------------------------------------------------
 
 1 Kernel(main.c)
@@ -70,5 +70,8 @@ sched_init will create the idle task and call context_create to create its conte
 
 allocate_tasks sets up given tasks' context and pit them into runqueue. 
 
-7 ub_test
+7 ub_test(ub_test.c)
+We embedded ub_test into create_task to check if the submitted tasks are schedualable. The job of ub_test:
+- Sort the tasks by frequency.
+- UB test: to boost the test phase, we use a look-up table to store values for 64 tasks for quick check.
 
