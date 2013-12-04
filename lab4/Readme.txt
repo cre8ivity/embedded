@@ -68,7 +68,7 @@ context_create will set up the context of a task and add it to runqueue.
 
 sched_init will create the idle task and call context_create to create its context.
 
-allocate_tasks sets up given tasks' context and pit them into runqueue. 
+allocate_tasks sets up given tasks' context and puts them into runqueue. 
 
 7 ub_test(ub_test.c)
 We embedded ub_test into create_task to check if the submitted tasks are schedualable. The job of ub_test:
