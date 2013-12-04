@@ -75,3 +75,5 @@ We embedded ub_test into create_task to check if the submitted tasks are schedua
 - Sort the tasks by frequency.
 - UB test: to boost the test phase, we use a look-up table to store values for 64 tasks for quick check.
 
+8 highest locker protocol
+To prevent deadlock, we adopted highest locker protocol. Since we cannot do offline analysis, to simplify the implementation, we will temporily raise the priority of the task calling lock() to 0, and forbid it to call event_wait. After the tasks releases all lockers, its priority will decreases to its origin.
